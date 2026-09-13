@@ -100,12 +100,12 @@ enum Brand {
 
     enum Supabase {
         /// Project URL, e.g. https://abcdefgh.supabase.co
-        static let projectURLString = "REPLACE_ME_SUPABASE_URL"
+        static let projectURLString = "https://rrzssplknevyaripgniu.supabase.co"
 
         /// The anon / publishable key. This is public by design — it carries no
         /// privilege on its own and every table is protected by row-level
         /// security. Safe to ship in a GPL binary whose source is published.
-        static let anonKey = "REPLACE_ME_SUPABASE_ANON_KEY"
+        static let anonKey = "sb_publishable_HfF5gJPOcxtwZW6F5POu0Q_Cie1uBdC"
 
         static var projectURL: URL? {
             guard !self.projectURLString.hasPrefix("REPLACE_ME") else { return nil }

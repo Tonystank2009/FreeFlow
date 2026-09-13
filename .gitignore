@@ -228,3 +228,8 @@ builds/
 
 # Resolved SPM checkouts (xcodebuild -clonedSourcePackagesDirPath)
 SourcePackages/
+
+# Any derived-data variant, not just the default name. The previous rule was
+# "DerivedData/", which silently failed to match "DerivedDataRelease/".
+DerivedData*/
+dist/

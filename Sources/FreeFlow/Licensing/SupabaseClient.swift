@@ -193,18 +193,29 @@ final class SupabaseClient {
         request.setValue(Brand.Supabase.anonKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(Brand.Supabase.anonKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        // Duplicate address is success, not an error worth showing anyone.
-        request.setValue("resolution=ignore-duplicates", forHTTPHeaderField: "Prefer")
+        // Deliberately no "resolution=ignore-duplicates": that turns the call
+        // into an upsert, and an upsert needs a select policy to check the
+        // conflict. With insert-only RLS it fails with a policy violation, so
+        // the header meant every signup was silently rejected. A repeat address
+        // now hits the unique index and comes back 409, which is success as far
+        // as anyone here is concerned.
         request.httpBody = try JSONSerialization.data(withJSONObject: [
             "email": trimmed,
             "source": "onboarding",
             "app_version": AppVersion.short,
         ])
 
+        let response: URLResponse
         do {
-            _ = try await self.session.data(for: request)
+            (_, response) = try await self.session.data(for: request)
         } catch {
             throw SupabaseError.network(error)
+        }
+
+        guard let http = response as? HTTPURLResponse else { return }
+        // 409 = already on the list.
+        guard (200 ..< 300).contains(http.statusCode) || http.statusCode == 409 else {
+            throw SupabaseError.api(status: http.statusCode, message: nil)
         }
     }
 

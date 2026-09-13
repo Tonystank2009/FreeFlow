@@ -23,5 +23,8 @@ drop policy if exists "anyone can sign up" on public.signups;
 create policy "anyone can sign up"
     on public.signups
     for insert
-    to anon, authenticated
+    to public
     with check (true);
+
+grant usage on schema public to anon, authenticated;
+grant insert on public.signups to anon, authenticated;
