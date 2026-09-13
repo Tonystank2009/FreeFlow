@@ -112,7 +112,7 @@ struct FeedbackView: View {
                                     }
                                     .fluidButton(.glass, size: .medium)
                                     .buttonHoverEffect()
-                                    .help("Sponsor Altic on GitHub")
+                                    .help("Sponsor FreeFlow on GitHub")
                                 }
                             }
                         }
