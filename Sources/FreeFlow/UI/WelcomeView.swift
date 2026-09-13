@@ -34,6 +34,32 @@ struct WelcomeView: View {
         DictationAIPostProcessingGate.isProviderConfigured()
     }
 
+    /// True once dictation can actually be used.
+    private var isEverythingReady: Bool {
+        (self.asr.isAsrReady || self.asr.modelsExistOnDisk)
+            && self.asr.micStatus == .authorized
+            && self.accessibilityEnabled
+    }
+
+    /// What someone opening FreeFlow actually wants to know: the key to press.
+    private var hotkeyHero: some View {
+        ThemedCard(style: .prominent) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Hold your hotkey and talk")
+                    .font(self.theme.typography.sectionTitle)
+                    .foregroundStyle(self.theme.palette.primaryText)
+
+                Text("FreeFlow types what you say into whatever app you're in — "
+                    + "Mail, Slack, a browser, anywhere.")
+                    .font(self.theme.typography.bodySmall)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(14)
+        }
+    }
+
     private var appDisplayName: String {
         Bundle.main.fluidAppDisplayName
     }
@@ -47,7 +73,7 @@ struct WelcomeView: View {
                             .font(self.theme.typography.titleIcon)
                             .foregroundStyle(self.theme.palette.accent)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text((self.asr.isAsrReady || self.asr.modelsExistOnDisk) ? "Getting Started" : "Welcome to FreeFlow")
+                            Text(self.isEverythingReady ? "FreeFlow is ready" : "Welcome to FreeFlow")
                                 .font(self.theme.typography.title)
                             Text("Talk anywhere. FreeFlow types for you.")
                                 .font(self.theme.typography.bodySmall)
@@ -56,7 +82,8 @@ struct WelcomeView: View {
                     }
                     .padding(.bottom, 4)
 
-                    // Quick Setup Checklist
+                    // Shown only while something genuinely needs attention.
+                    if !self.isEverythingReady {
                     ThemedCard(style: .prominent) {
                         VStack(alignment: .leading, spacing: 12) {
                             HStack(spacing: 10) {
@@ -128,50 +155,24 @@ struct WelcomeView: View {
                                     showActionButton: !self.accessibilityEnabled
                                 )
 
-                                SetupStepView(
-                                    step: 4,
-                                    title: self.isAIEnhancementReady ? "AI Enhancement Configured" : "Set Up AI Enhancement (Optional)",
-                                    description: self.isAIEnhancementReady
-                                        ? "AI-powered text enhancement is ready to use"
-                                        : "Configure API keys for AI-powered text enhancement",
-                                    status: self.isAIEnhancementReady ? .completed : .pending,
-                                    action: {
-                                        self.selectedSidebarItem = .aiEnhancements
-                                    },
-                                    actionButtonTitle: "AI Providers"
-                                )
-
-                                SetupStepView(
-                                    step: 5,
-                                    title: self.playgroundUsed ? "Setup Tested Successfully" : "Test Your Setup",
-                                    description: self.playgroundUsed
-                                        ? "You've successfully tested voice transcription"
-                                        : "Try the playground below to test your complete setup",
-                                    status: self.playgroundUsed ? .completed : .pending,
-                                    action: {
-                                        withAnimation(.easeInOut(duration: 0.25)) {
-                                            proxy.scrollTo(self.playgroundSectionID, anchor: .top)
-                                        }
-                                        self.isTranscriptionFocused.wrappedValue = true
-                                    },
-                                    actionButtonTitle: "Go to Playground",
-                                    showActionButton: !self.playgroundUsed
-                                )
-                                .id("playground-step-\(self.playgroundUsed)")
                             }
                         }
                         .padding(14)
                     }
+                    }
 
-                    // Test Playground
+                    if self.isEverythingReady {
+                        self.hotkeyHero
+                    }
+
                     ThemedCard(hoverEffect: false) {
                         VStack(alignment: .leading, spacing: 14) {
                             HStack {
                                 Label {
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text("Test Playground")
+                                        Text("Try it")
                                             .font(self.theme.typography.sectionTitle)
-                                        Text("Click record, speak, and see your transcription")
+                                        Text("Press your hotkey anywhere, or record here to hear how it sounds.")
                                             .font(self.theme.typography.caption)
                                             .foregroundStyle(.secondary)
                                     }
@@ -1631,25 +1632,30 @@ struct OnboardingFlowView: View {
                             FreeFlowOnboardingCompactAppIconMark(size: 66)
                                 .padding(.bottom, 22)
 
-                            Text("Try five tasks free.")
-                                .font(.system(size: 30, weight: .semibold))
+                            Text("Stop typing.\nStart talking.")
+                                .font(.system(size: 32, weight: .semibold))
                                 .foregroundStyle(.white)
                                 .multilineTextAlignment(.center)
+                                .lineSpacing(2)
                                 .fixedSize(horizontal: false, vertical: true)
-                                .padding(.bottom, 12)
+                                .padding(.bottom, 16)
 
-                            Text("Like it? $5 once — then it's yours forever.")
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color.white.opacity(0.62))
-                                .padding(.bottom, 24)
+                            Text("FreeFlow types what you say, in any app and on any website. "
+                                + "It runs on your Mac, so nothing you say is ever uploaded.")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(Color.white.opacity(0.70))
+                                .multilineTextAlignment(.center)
+                                .lineSpacing(3)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(width: 470)
+                                .padding(.bottom, 30)
 
-                            self.priceComparison
-                                .frame(width: 560)
+                            self.offerLine
+                                .padding(.bottom, 14)
 
-                            Text("No card to try it. No subscription, ever.")
+                            Text("No subscription. Others charge $15 every month.")
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color.white.opacity(0.44))
-                                .padding(.top, 18)
+                                .foregroundStyle(Color.white.opacity(0.40))
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.top, 30)
@@ -1678,102 +1684,40 @@ struct OnboardingFlowView: View {
         }
     }
 
-    private var priceComparison: some View {
-        HStack(alignment: .top, spacing: 14) {
-            self.priceCard(
-                name: Brand.appName,
-                price: "$5",
-                cadence: "once, then free forever",
-                points: [
-                    (true, "Runs on your Mac"),
-                    (true, "Audio never leaves your device"),
-                    (true, "Works with no internet"),
-                    (true, "Every future update included"),
-                ],
-                isHero: true
-            )
-
-            self.priceCard(
-                name: "Wispr Flow",
-                price: "$15",
-                cadence: "every month",
-                points: [
-                    (false, "Transcribes in the cloud"),
-                    (false, "Your audio leaves your Mac"),
-                    (false, "Needs a connection to work"),
-                    (false, "$180 a year, every year"),
-                ],
-                isHero: false
-            )
+    /// The whole offer in one line: try it, then pay once.
+    private var offerLine: some View {
+        HStack(spacing: 0) {
+            self.offerBeat("Try 5 free", isEmphasis: false)
+            self.offerArrow
+            self.offerBeat("Pay $5 once", isEmphasis: true)
+            self.offerArrow
+            self.offerBeat("Free forever", isEmphasis: false)
         }
-    }
-
-    private func priceCard(
-        name: String,
-        price: String,
-        cadence: String,
-        points: [(Bool, String)],
-        isHero: Bool
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text(name)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(isHero ? .white : Color.white.opacity(0.62))
-
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text(price)
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundStyle(
-                        isHero
-                            ? FreeFlowOnboardingColors.accentBright
-                            : FreeFlowOnboardingColors.caution
-                    )
-
-                Text(cadence)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.white.opacity(isHero ? 0.62 : 0.46))
-            }
-
-            VStack(alignment: .leading, spacing: 9) {
-                ForEach(points, id: \.1) { point in
-                    HStack(alignment: .top, spacing: 8) {
-                        Image(systemName: point.0 ? "checkmark" : "xmark")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(
-                                point.0
-                                    ? FreeFlowOnboardingColors.positive
-                                    : FreeFlowOnboardingColors.caution
-                            )
-                            .frame(width: 12, alignment: .center)
-                            .padding(.top, 3)
-
-                        Text(point.1)
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(Color.white.opacity(isHero ? 0.86 : 0.54))
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-            }
-
-            Spacer(minLength: 0)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(18)
+        .padding(.vertical, 14)
+        .padding(.horizontal, 22)
         .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color.white.opacity(isHero ? 0.06 : 0.025))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .stroke(
-                            isHero
-                                ? FreeFlowOnboardingColors.accent.opacity(0.42)
-                                : Color.white.opacity(0.07),
-                            lineWidth: 1
-                        )
-                )
+            Capsule()
+                .fill(Color.white.opacity(0.05))
+                .overlay(Capsule().stroke(Color.white.opacity(0.10), lineWidth: 1))
         )
     }
 
+    private func offerBeat(_ text: String, isEmphasis: Bool) -> some View {
+        Text(text)
+            .font(.system(size: 15, weight: isEmphasis ? .bold : .semibold))
+            .foregroundStyle(
+                isEmphasis
+                    ? FreeFlowOnboardingColors.accent
+                    : Color.white.opacity(0.88)
+            )
+    }
+
+    private var offerArrow: some View {
+        Image(systemName: "arrow.right")
+            .font(.system(size: 11, weight: .semibold))
+            .foregroundStyle(Color.white.opacity(0.30))
+            .padding(.horizontal, 12)
+    }
 
     private var playgroundStep: some View {
         GeometryReader { proxy in
