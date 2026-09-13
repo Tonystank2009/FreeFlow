@@ -45,7 +45,7 @@
 			containerPortal = 7C078D872E3B339200FB7CAC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7C078D8E2E3B339200FB7CAC;
-			remoteInfo = fluid;
+			remoteInfo = FreeFlow;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -91,7 +91,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7C078D912E3B339200FB7CAC /* Sources/Fluid */ = {
+		7C078D912E3B339200FB7CAC /* Sources/FreeFlow */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Sources/FreeFlow;
 			sourceTree = "<group>";
@@ -126,7 +126,7 @@
 		7C078D862E3B339200FB7CAC = {
 			isa = PBXGroup;
 			children = (
-				7C078D912E3B339200FB7CAC /* Sources/Fluid */,
+				7C078D912E3B339200FB7CAC /* Sources/FreeFlow */,
 				7CDB0A242F3C4D5600FB7CAD /* Tests */,
 				7CDB0A282F3C4D5600FB7CAD /* Frameworks */,
 			);
@@ -204,9 +204,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7C078D8E2E3B339200FB7CAC /* fluid */ = {
+		7C078D8E2E3B339200FB7CAC /* FreeFlow */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7C078D9A2E3B339300FB7CAC /* Build configuration list for PBXNativeTarget "fluid" */;
+			buildConfigurationList = 7C078D9A2E3B339300FB7CAC /* Build configuration list for PBXNativeTarget "FreeFlow" */;
 			buildPhases = (
 				7C078D8B2E3B339200FB7CAC /* Sources */,
 				7C078D8C2E3B339200FB7CAC /* Frameworks */,
@@ -218,9 +218,9 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				7C078D912E3B339200FB7CAC /* Sources/Fluid */,
+				7C078D912E3B339200FB7CAC /* Sources/FreeFlow */,
 			);
-			name = fluid;
+			name = FreeFlow;
 			packageProductDependencies = (
 				7C078DA42E3B386A00FB7CAC /* FluidAudio */,
 				7C3697882ED70F9C005874CE /* DynamicNotchKit */,
@@ -271,7 +271,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7C078D8A2E3B339200FB7CAC /* Build configuration list for PBXProject "Fluid" */;
+			buildConfigurationList = 7C078D8A2E3B339200FB7CAC /* Build configuration list for PBXProject "FreeFlow" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -292,7 +292,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7C078D8E2E3B339200FB7CAC /* fluid */,
+				7C078D8E2E3B339200FB7CAC /* FreeFlow */,
 				7CDB0A1F2F3C4D5600FB7CAD /* FreeFlowDictationIntegrationTests */,
 			);
 		};
@@ -356,7 +356,7 @@
 /* Begin PBXTargetDependency section */
 		7CDB0A312F3C4D5600FB7CAD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7C078D8E2E3B339200FB7CAC /* fluid */;
+			target = 7C078D8E2E3B339200FB7CAC /* FreeFlow */;
 			targetProxy = 7CDB0A322F3C4D5600FB7CAD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -533,7 +533,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ARCH_ARM64";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Sources/Fluid/Fluid-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/FreeFlow/FreeFlow-Bridging-Header.h";
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
@@ -588,7 +588,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ARCH_ARM64";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Sources/Fluid/Fluid-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/FreeFlow/FreeFlow-Bridging-Header.h";
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
@@ -649,7 +649,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7C078D8A2E3B339200FB7CAC /* Build configuration list for PBXProject "Fluid" */ = {
+		7C078D8A2E3B339200FB7CAC /* Build configuration list for PBXProject "FreeFlow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7C078D982E3B339300FB7CAC /* Debug */,
@@ -658,7 +658,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7C078D9A2E3B339300FB7CAC /* Build configuration list for PBXNativeTarget "fluid" */ = {
+		7C078D9A2E3B339300FB7CAC /* Build configuration list for PBXNativeTarget "FreeFlow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7C078D9B2E3B339300FB7CAC /* Debug */,

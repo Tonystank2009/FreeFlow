@@ -17,8 +17,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7C078D8E2E3B339200FB7CAC"
                BuildableName = "FreeFlow.app"
-               BlueprintName = "fluid"
-               ReferencedContainer = "container:Fluid.xcodeproj">
+               BlueprintName = "FreeFlow"
+               ReferencedContainer = "container:FreeFlow.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,9 +35,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7CDB0A1F2F3C4D5600FB7CAD"
-               BuildableName = "FluidDictationIntegrationTests.xctest"
-               BlueprintName = "FluidDictationIntegrationTests"
-               ReferencedContainer = "container:Fluid.xcodeproj">
+               BuildableName = "FreeFlowDictationIntegrationTests.xctest"
+               BlueprintName = "FreeFlowDictationIntegrationTests"
+               ReferencedContainer = "container:FreeFlow.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -58,8 +58,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7C078D8E2E3B339200FB7CAC"
             BuildableName = "FreeFlow.app"
-            BlueprintName = "fluid"
-            ReferencedContainer = "container:Fluid.xcodeproj">
+            BlueprintName = "FreeFlow"
+            ReferencedContainer = "container:FreeFlow.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -75,8 +75,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7C078D8E2E3B339200FB7CAC"
             BuildableName = "FreeFlow.app"
-            BlueprintName = "fluid"
-            ReferencedContainer = "container:Fluid.xcodeproj">
+            BlueprintName = "FreeFlow"
+            ReferencedContainer = "container:FreeFlow.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -225,3 +225,6 @@ sample/
 .codex
 AGENTS.md
 builds/
+
+# Resolved SPM checkouts (xcodebuild -clonedSourcePackagesDirPath)
+SourcePackages/
