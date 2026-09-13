@@ -358,6 +358,9 @@ struct OnboardingFlowView: View {
     @State private var isOnboardingFlowVisible = false
     @State private var hoveredFooterButton: OnboardingFooterButton?
     @State private var isShowingAllLanguages = false
+    @ObservedObject private var license = LicenseManager.shared
+    @State private var signInEmail = ""
+    @State private var signInCode = ""
     @State private var isShowingOtherModelRoutes = false
     @State private var hasStartedAutomaticModelSetup = false
     @State private var automaticSetupDidFail = false
@@ -396,15 +399,17 @@ struct OnboardingFlowView: View {
     }
 
     private enum Step: Int, CaseIterable {
-        case landing = 0
-        case language = 1
-        case voiceModel = 2
-        case permissions = 3
-        case playground = 4
-        case pricing = 5
+        case signIn = 0
+        case landing = 1
+        case language = 2
+        case voiceModel = 3
+        case permissions = 4
+        case playground = 5
+        case pricing = 6
 
         var analyticsStep: AnalyticsOnboardingStep {
             switch self {
+            case .signIn: .welcome
             case .landing: .welcome
             case .language: .language
             case .voiceModel: .voiceModel
@@ -416,6 +421,8 @@ struct OnboardingFlowView: View {
 
         var title: String {
             switch self {
+            case .signIn:
+                return "Sign In"
             case .landing:
                 return "Welcome"
             case .language:
@@ -433,6 +440,8 @@ struct OnboardingFlowView: View {
 
         var subtitle: String {
             switch self {
+            case .signIn:
+                return "Sign in so your purchase follows you to any Mac."
             case .landing:
                 return "Talk anywhere. FreeFlow types for you."
             case .language:
@@ -603,6 +612,8 @@ struct OnboardingFlowView: View {
         }
 
         switch self.step {
+        case .signIn:
+            return true
         case .landing:
             return true
         case .language:
@@ -620,6 +631,8 @@ struct OnboardingFlowView: View {
 
     private var primaryButtonTitle: String {
         switch self.step {
+        case .signIn:
+            return self.license.isSignedIn ? "Continue" : "Skip for now"
         case .landing:
             return "Next"
         case .language:
@@ -763,6 +776,8 @@ struct OnboardingFlowView: View {
     @ViewBuilder
     private var stepContent: some View {
         switch self.step {
+        case .signIn:
+            self.signInStep
         case .landing:
             self.landingStep
         case .language:
@@ -775,6 +790,168 @@ struct OnboardingFlowView: View {
             self.pricingStep
         case .playground:
             self.playgroundStep
+        }
+    }
+
+    /// First screen. Deliberately skippable.
+    ///
+    /// An account is only strictly needed to carry a purchase between Macs, and
+    /// asking for one before someone has seen the app work is the biggest
+    /// drop-off point in consumer onboarding. So it leads, but it never blocks.
+    private var signInStep: some View {
+        GeometryReader { proxy in
+            ZStack {
+                FreeFlowOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
+
+                VStack(spacing: 0) {
+                    FreeFlowOnboardingCompactProgress(value: self.compactProgressValue)
+                        .padding(.top, 28)
+
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(spacing: 0) {
+                            FreeFlowOnboardingCompactAppIconMark(size: 66)
+                                .padding(.bottom, 22)
+
+                            Text(self.license.isSignedIn ? "You're signed in" : "Welcome to FreeFlow")
+                                .font(.system(size: 30, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .multilineTextAlignment(.center)
+                                .padding(.bottom, 12)
+
+                            Text(self.signInSubtitle)
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundStyle(Color.white.opacity(0.62))
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(width: 420)
+                                .padding(.bottom, 26)
+
+                            if !self.license.isSignedIn {
+                                self.signInFields.frame(width: 360)
+                            }
+
+                            if let error = license.errorMessage {
+                                Text(error)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(Color(nsColor: .systemRed))
+                                    .multilineTextAlignment(.center)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .frame(width: 380)
+                                    .padding(.top, 14)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 30)
+                        .padding(.bottom, 12)
+                    }
+
+                    self.cinematicFooter(
+                        continueTitle: self.primaryButtonTitle,
+                        canContinue: true
+                    ) {
+                        self.handlePrimaryAction()
+                    }
+                }
+
+                FreeFlowOnboardingLandingHoverTracker(
+                    onMove: { location, size in
+                        self.updateLandingGlow(location: location, in: size)
+                    },
+                    onExit: { self.resetLandingGlow() }
+                )
+                .frame(width: proxy.size.width, height: proxy.size.height)
+                .accessibilityHidden(true)
+            }
+        }
+    }
+
+    private var signInSubtitle: String {
+        if let email = license.accountEmail {
+            return "Signed in as \(email)."
+        }
+        switch self.license.authStep {
+        case .enterEmail:
+            return "Use any email. We'll send a code — no password to make or forget."
+        case let .enterCode(address):
+            return "Enter the 6-digit code we sent to \(address)."
+        }
+    }
+
+    @ViewBuilder
+    private var signInFields: some View {
+        switch self.license.authStep {
+        case .enterEmail:
+            VStack(spacing: 10) {
+                TextField("you@example.com", text: self.$signInEmail)
+                    .textFieldStyle(.plain)
+                    .font(.system(size: 15, weight: .medium))
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 11)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .fill(Color.white.opacity(0.07))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                            )
+                    )
+                    .onSubmit { Task { await self.license.sendCode(to: self.signInEmail) } }
+
+                Button {
+                    Task { await self.license.sendCode(to: self.signInEmail) }
+                } label: {
+                    HStack(spacing: 6) {
+                        if self.license.isSendingCode { ProgressView().controlSize(.small) }
+                        Text(self.license.isSendingCode ? "Sending…" : "Email me a code")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(FreeFlowOnboardingColors.accent)
+                .disabled(self.license.isSendingCode || self.signInEmail.isEmpty)
+            }
+
+        case .enterCode:
+            VStack(spacing: 10) {
+                TextField("123456", text: self.$signInCode)
+                    .textFieldStyle(.plain)
+                    .font(.system(size: 20, weight: .semibold, design: .monospaced))
+                    .multilineTextAlignment(.center)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .fill(Color.white.opacity(0.07))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                            )
+                    )
+                    .onSubmit { Task { await self.license.verifyCode(self.signInCode) } }
+
+                Button {
+                    Task { await self.license.verifyCode(self.signInCode) }
+                } label: {
+                    HStack(spacing: 6) {
+                        if self.license.isVerifying { ProgressView().controlSize(.small) }
+                        Text(self.license.isVerifying ? "Checking…" : "Continue")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(FreeFlowOnboardingColors.accent)
+                .disabled(self.license.isVerifying || self.signInCode.isEmpty)
+
+                Button("Use a different email") {
+                    self.signInCode = ""
+                    self.license.restartSignIn()
+                }
+                .buttonStyle(.link)
+                .font(.system(size: 12, weight: .medium))
+            }
         }
     }
 
