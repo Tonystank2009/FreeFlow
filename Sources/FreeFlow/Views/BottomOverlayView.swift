@@ -2135,22 +2135,22 @@ struct BottomOverlayView: View {
             switch size {
             case .pill:
                 return LayoutConstants(
-                    hPadding: 12,
-                    vPadding: 8,
-                    waveformWidth: 46,
-                    waveformHeight: 30,
-                    iconSize: 18,
+                    hPadding: 15,
+                    vPadding: 7,
+                    waveformWidth: 54,
+                    waveformHeight: 26,
+                    iconSize: 17,
                     transFontSize: 10,
                     modeFontSize: 9,
-                    cornerRadius: 23,
+                    cornerRadius: 21,
                     barCount: 8,
-                    barWidth: 3.0,
-                    barSpacing: 2.5,
-                    minBarHeight: 4,
-                    maxBarHeight: 28,
-                    containerWidth: 100,
-                    overlayWidth: 100,
-                    overlayHeight: 46,
+                    barWidth: 2.5,
+                    barSpacing: 3.0,
+                    minBarHeight: 3,
+                    maxBarHeight: 24,
+                    containerWidth: 116,
+                    overlayWidth: 116,
+                    overlayHeight: 42,
                     previewBoxHeight: 0,
                     usesFixedCanvas: false,
                     showsTopControls: false,
@@ -2267,7 +2267,7 @@ struct BottomOverlayView: View {
 
     private var processingLabel: String {
         switch self.contentState.mode {
-        case .dictation: return "Refining..."
+        case .dictation: return "Polishing…"
         case .edit, .rewrite, .write: return "Thinking..."
         case .command: return "Working..."
         }
@@ -2285,17 +2285,17 @@ struct BottomOverlayView: View {
 
     private static let transientOverlayStatusTexts: Set<String> = [
         "Transcribing",
-        "Refining",
+        "Polishing",
         "Thinking",
         "Working",
-        "Transcribing...",
-        "Refining...",
+        "Transcribing…",
+        "Polishing…",
         "Thinking...",
         "Working...",
     ]
 
     /// ContentView writes transient status strings into transcriptionText while processing
-    /// (e.g. "Transcribing...", "Refining..."). Prefer that when present.
+    /// (e.g. "Transcribing…", "Polishing…"). Prefer that when present.
     private var processingStatusText: String {
         let t = self.contentState.transcriptionText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard Self.transientOverlayStatusTexts.contains(t) else { return self.processingLabel }
@@ -3321,63 +3321,37 @@ struct BottomOverlayView: View {
                 ZStack {
                     // Solid pitch black background, with a soft drop shadow so the pill lifts
                     // off whatever is behind it (pill size only; outer padding reserves room).
-                    RoundedRectangle(cornerRadius: self.layout.cornerRadius)
-                        .fill(Color.black)
+                    RoundedRectangle(cornerRadius: self.layout.cornerRadius, style: .continuous)
+                        .fill(Color(red: 0.11, green: 0.11, blue: 0.12))
                         .shadow(
-                            color: Color.black.opacity(self.isPillSize ? 0.32 : 0),
+                            color: Color.black.opacity(self.isPillSize ? 0.45 : 0),
                             radius: self.isPillSize ? PillShadowMetrics.radius : 0,
                             x: 0,
                             y: self.isPillSize ? PillShadowMetrics.yOffset : 0
                         )
 
                     if self.isPillSize {
-                        // Glossy border: a bright highlight that slowly rotates around the edge.
-                        // Paused under reduce-motion to avoid continuous redraws on low-resource Macs.
-                        if self.reduceMotion || !self.contentState.isBottomOverlayPresented {
-                            RoundedRectangle(cornerRadius: self.layout.cornerRadius)
-                                .strokeBorder(
-                                    AngularGradient(
-                                        gradient: Gradient(stops: [
-                                            .init(color: .white.opacity(0.06), location: 0.00),
-                                            .init(color: .white.opacity(0.55), location: 0.13),
-                                            .init(color: .white.opacity(0.10), location: 0.30),
-                                            .init(color: .white.opacity(0.03), location: 0.55),
-                                            .init(color: .white.opacity(0.22), location: 0.80),
-                                            .init(color: .white.opacity(0.06), location: 1.00),
-                                        ]),
-                                        center: .center,
-                                        angle: .degrees(0)
-                                    ),
-                                    lineWidth: 1.2
-                                )
-                        } else {
-                            TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { timeline in
-                                let seconds = max(
-                                    0,
-                                    timeline.date.timeIntervalSince(self.borderAnimationStartedAt ?? timeline.date)
-                                )
-                                let angle = (seconds.truncatingRemainder(dividingBy: 6.0) / 6.0) * 360.0
-                                RoundedRectangle(cornerRadius: self.layout.cornerRadius)
-                                    .strokeBorder(
-                                        AngularGradient(
-                                            gradient: Gradient(stops: [
-                                                .init(color: .white.opacity(0.06), location: 0.00),
-                                                .init(color: .white.opacity(0.55), location: 0.13),
-                                                .init(color: .white.opacity(0.10), location: 0.30),
-                                                .init(color: .white.opacity(0.03), location: 0.55),
-                                                .init(color: .white.opacity(0.22), location: 0.80),
-                                                .init(color: .white.opacity(0.06), location: 1.00),
-                                            ]),
-                                            center: .center,
-                                            angle: .degrees(angle)
-                                        ),
-                                        lineWidth: 1.2
-                                    )
-                            }
-                        }
+                        // A single light source from above, not a rotating
+                        // highlight. Real objects are lit from one direction and
+                        // hold still; a shimmer travelling around the edge reads
+                        // as decoration, which is the one thing this should not
+                        // be while someone is mid-sentence.
+                        RoundedRectangle(cornerRadius: self.layout.cornerRadius, style: .continuous)
+                            .strokeBorder(
+                                LinearGradient(
+                                    colors: [
+                                        Color.white.opacity(0.28),
+                                        Color.white.opacity(0.10),
+                                        Color.white.opacity(0.05),
+                                    ],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ),
+                                lineWidth: 0.75
+                            )
                     } else {
                         // Inner border
-                        RoundedRectangle(cornerRadius: self.layout.cornerRadius)
+                        RoundedRectangle(cornerRadius: self.layout.cornerRadius, style: .continuous)
                             .strokeBorder(
                                 LinearGradient(
                                     colors: [

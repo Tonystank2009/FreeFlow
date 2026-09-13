@@ -531,17 +531,17 @@ struct NotchExpandedView: View {
 
     private static let transientOverlayStatusTexts: Set<String> = [
         "Transcribing",
-        "Refining",
+        "Polishing",
         "Thinking",
         "Working",
-        "Transcribing...",
-        "Refining...",
+        "Transcribing…",
+        "Polishing…",
         "Thinking...",
         "Working...",
     ]
 
     /// ContentView writes transient status strings into transcriptionText while processing
-    /// (e.g. "Transcribing...", "Refining..."). Prefer that when present.
+    /// (e.g. "Transcribing…", "Polishing…"). Prefer that when present.
     private var processingStatusText: String {
         let t = self.contentState.transcriptionText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard Self.transientOverlayStatusTexts.contains(t) else { return self.processingLabel }
@@ -1308,11 +1308,11 @@ struct NotchCompactBottomView: View {
     private let previewHeight: CGFloat = 20
     private static let transientOverlayStatusTexts: Set<String> = [
         "Transcribing",
-        "Refining",
+        "Polishing",
         "Thinking",
         "Working",
-        "Transcribing...",
-        "Refining...",
+        "Transcribing…",
+        "Polishing…",
         "Thinking...",
         "Working...",
     ]
@@ -1449,7 +1449,7 @@ struct NotchCommandOutputExpandedView: View {
 
                 // Mode label
                 if self.contentState.isRecordingInExpandedMode {
-                    Text("Listening...")
+                    Text("Listening…")
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(self.commandRed)
                 } else if self.contentState.isCommandProcessing {

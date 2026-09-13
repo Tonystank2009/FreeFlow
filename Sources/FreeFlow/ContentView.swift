@@ -2631,7 +2631,7 @@ struct ContentView: View {
 
             // Update overlay text to show we're now refining (processing already true)
             self.appBench("processing_ui_request status=Refining")
-            NotchOverlayManager.shared.updateTranscriptionText("Refining")
+            NotchOverlayManager.shared.updateTranscriptionText("Polishing")
             self.appBench("processing_ui_requested status=Refining")
 
             // Ensure the status label becomes visible immediately.
@@ -2683,7 +2683,7 @@ struct ContentView: View {
                 source: "ContentView"
             )
             // Clear transient status text before leaving processing state to avoid
-            // a brief non-shimmer "Refining..." preview flash.
+            // a brief non-shimmer "Polishing…" preview flash.
             NotchOverlayManager.shared.updateTranscriptionText("")
 
         } else {

@@ -104,11 +104,11 @@ final class NotchOverlayManager {
     private var presentationPolicyScreen: NSScreen?
     private static let transientOverlayStatusTexts: Set<String> = [
         "Transcribing",
-        "Refining",
+        "Polishing",
         "Thinking",
         "Working",
-        "Transcribing...",
-        "Refining...",
+        "Transcribing…",
+        "Polishing…",
         "Thinking...",
         "Working...",
         "Reprocessing...",
