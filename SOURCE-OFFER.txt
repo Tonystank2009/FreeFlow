@@ -1,0 +1,46 @@
+FreeFlow — source code and licence
+==================================
+
+FreeFlow is free software, licensed under the GNU General Public License
+version 3. You paid for a signed, notarised, ready-to-run build and to support
+development; you did not buy away any of your freedoms under that licence.
+
+YOUR RIGHTS
+
+  * Use FreeFlow for any purpose, on as many machines as you like.
+  * Read and study the complete source code.
+  * Modify it however you wish.
+  * Share it, including modified versions, provided you pass on these same
+    freedoms under the GPL-3.
+
+COMPLETE CORRESPONDING SOURCE
+
+  The complete source for this exact build, including the build scripts needed
+  to reproduce it, is published at:
+
+      https://github.com/adhyanshupadhyaya/FreeFlow
+
+  Each release is tagged with its version number, so the source matching this
+  binary is the tag whose name equals the version shown in FreeFlow > About.
+
+  This is a written offer under GPL-3 section 6: if that repository is ever
+  unavailable, you may request the complete corresponding source by opening an
+  issue, and it will be provided for no more than the cost of distribution.
+
+BUILDING IT YOURSELF
+
+      git clone https://github.com/adhyanshupadhyaya/FreeFlow
+      cd FreeFlow
+      ./build.sh
+
+  Requires Xcode and macOS 15 or later.
+
+BASED ON FLUIDVOICE
+
+  FreeFlow is a modified version of FluidVoice by Altic Dev
+  (https://github.com/altic-dev/FluidVoice), also GPL-3. See NOTICE.md in the
+  repository for the full list of changes.
+
+FULL LICENCE TEXT
+
+      https://github.com/adhyanshupadhyaya/FreeFlow/blob/main/LICENSE
