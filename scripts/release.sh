@@ -56,14 +56,23 @@ xcodebuild -version >/dev/null 2>&1 || die \
 
 # Refuse to ship a build whose commerce config is still a placeholder — this is
 # the difference between a DMG that can take money and one that cannot.
-# Match real assignments only, so prose mentioning the token doesn't trip this.
-# supportEmail is intentionally optional and excluded.
-PLACEHOLDERS=$(grep -nE '= *"REPLACE_ME' Sources/FreeFlow/Licensing/Brand.swift \
-  | grep -v "REPLACE_ME_SUPPORT_EMAIL" || true)
-if [ -n "$PLACEHOLDERS" ]; then
-  red "Brand.swift still contains placeholders:"
-  echo "$PLACEHOLDERS" | sed 's/^/    /'
-  die "Fill these in before cutting a release (see docs/SETUP.md)."
+# Commerce config only has to be real when the paywall is switched on.
+PAYWALL=$(grep -E 'static let isPaywallEnabled' Sources/FreeFlow/Licensing/Brand.swift \
+  | grep -c 'true' || true)
+
+if [ "$PAYWALL" != "0" ]; then
+  # Match real assignments only, so prose mentioning the token doesn't trip
+  # this. supportEmail is intentionally optional and excluded.
+  PLACEHOLDERS=$(grep -nE '= *"REPLACE_ME' Sources/FreeFlow/Licensing/Brand.swift \
+    | grep -v "REPLACE_ME_SUPPORT_EMAIL" || true)
+  if [ -n "$PLACEHOLDERS" ]; then
+    red "Paywall is enabled but Brand.swift still contains placeholders:"
+    echo "$PLACEHOLDERS" | sed 's/^/    /'
+    die "Fill these in before cutting a release (see docs/SETUP.md)."
+  fi
+  grn "  paywall          : enabled"
+else
+  ylw "  paywall          : disabled (shipping free)"
 fi
 
 SIGN_ID=$(security find-identity -v -p codesigning \

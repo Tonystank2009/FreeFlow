@@ -220,7 +220,7 @@ struct SettingsView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .settingsSearchTarget(self.selectedSection.searchTarget)
 
-                if self.selectedSection == .general {
+                if self.selectedSection == .general, Brand.Purchase.isPaywallEnabled {
                     LicenseSettingsCard()
                 }
 

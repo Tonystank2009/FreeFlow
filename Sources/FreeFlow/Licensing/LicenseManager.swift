@@ -65,6 +65,12 @@ final class LicenseManager: ObservableObject {
     // MARK: - Derived state
 
     private func recomputeState() {
+        // Paywall disabled: unconditionally unlocked, nothing to check.
+        guard Brand.Purchase.isPaywallEnabled else {
+            self.state = .licensed(.licenseKey)
+            return
+        }
+
         // A redeemed licence key wins outright — it's the offline fallback.
         if LicenseStore.load() != nil {
             self.state = .licensed(.licenseKey)
@@ -110,6 +116,7 @@ final class LicenseManager: ObservableObject {
     }
 
     func presentUnlock() {
+        guard Brand.Purchase.isPaywallEnabled else { return }
         self.errorMessage = nil
         self.infoMessage = nil
         self.isUnlockPromptPresented = true
@@ -133,6 +140,7 @@ final class LicenseManager: ObservableObject {
     // MARK: - Launch
 
     func bootstrap() {
+        guard Brand.Purchase.isPaywallEnabled else { return }
         guard !self.hasBootstrapped else { return }
         self.hasBootstrapped = true
 

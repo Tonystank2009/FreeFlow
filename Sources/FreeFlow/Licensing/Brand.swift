@@ -42,7 +42,16 @@ enum Brand {
     // MARK: - Commerce
 
     enum Purchase {
+        /// Master switch for the paywall.
+        ///
+        /// `false` ships FreeFlow completely free: no gate, no trial counter,
+        /// no account required, and nothing to configure. Flip to `true` to
+        /// turn on the trial-then-pay flow — the whole implementation is intact
+        /// behind this flag.
+        static let isPaywallEnabled = false
+
         /// Dictations a user gets before the unlock prompt becomes mandatory.
+        /// Ignored entirely while `isPaywallEnabled` is false.
         static let freeDictations = 5
 
         /// Display-only. The authoritative price lives in the Dodo dashboard.
