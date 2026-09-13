@@ -185,11 +185,14 @@ SettingsStore.xcuserstate
 
 .mcp_temp/
 
-# Build and release scripts (developer-specific)
+# Upstream's developer-specific build scripts.
+# FreeFlow's own scripts/release.sh is tracked on purpose: it is the script
+# that produces a distributed binary, which GPL-3 counts as corresponding
+# source.
 build_*
 build_dev.sh
 build_and_notarize.sh
-release.sh
+/release.sh
 release_private_fi.sh
 check_downloads.sh
 
