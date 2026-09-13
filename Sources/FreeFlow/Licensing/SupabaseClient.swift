@@ -174,6 +174,40 @@ final class SupabaseClient {
         return rows.first
     }
 
+    // MARK: Email capture
+
+    /// Records an address so there is a way to reach this person later.
+    ///
+    /// Unverified on purpose — no account, no emailed code, no password. The
+    /// cost is that some addresses will be typos; the benefit is that the ask
+    /// is one field and one click, which is the difference between most people
+    /// giving it and most people skipping.
+    func captureEmail(_ email: String) async throws {
+        guard let restURL = Brand.Supabase.restURL else { throw SupabaseError.notConfigured }
+
+        let trimmed = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard trimmed.contains("@"), trimmed.count > 3 else { return }
+
+        var request = URLRequest(url: restURL.appendingPathComponent("signups"))
+        request.httpMethod = "POST"
+        request.setValue(Brand.Supabase.anonKey, forHTTPHeaderField: "apikey")
+        request.setValue("Bearer \(Brand.Supabase.anonKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        // Duplicate address is success, not an error worth showing anyone.
+        request.setValue("resolution=ignore-duplicates", forHTTPHeaderField: "Prefer")
+        request.httpBody = try JSONSerialization.data(withJSONObject: [
+            "email": trimmed,
+            "source": "onboarding",
+            "app_version": AppVersion.short,
+        ])
+
+        do {
+            _ = try await self.session.data(for: request)
+        } catch {
+            throw SupabaseError.network(error)
+        }
+    }
+
     // MARK: - Transport
 
     private func parseSession(_ json: [String: Any]) throws -> SupabaseSession {

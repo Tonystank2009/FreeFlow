@@ -150,6 +150,42 @@ final class LicenseManager: ObservableObject {
         }
     }
 
+    // MARK: - Email capture
+
+    private static let capturedEmailKey = "FreeFlow_CapturedEmail"
+
+    var hasCapturedEmail: Bool {
+        !(UserDefaults.standard.string(forKey: Self.capturedEmailKey) ?? "").isEmpty
+    }
+
+    /// Stores the address locally and, best effort, in Supabase.
+    ///
+    /// Never blocks onboarding. If the network is down or Supabase is not
+    /// configured yet, the address is still kept on disk so a later run can
+    /// send it — losing a signup is not worth stopping someone setting up.
+    func captureEmail(_ email: String) async {
+        let trimmed = email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard trimmed.contains("@"), trimmed.count > 3 else {
+            self.errorMessage = "That doesn't look like an email address."
+            return
+        }
+
+        self.isSendingCode = true
+        self.errorMessage = nil
+        defer { self.isSendingCode = false }
+
+        UserDefaults.standard.set(trimmed, forKey: Self.capturedEmailKey)
+
+        do {
+            try await self.supabase.captureEmail(trimmed)
+        } catch {
+            DebugLogger.shared.debug(
+                "Email capture deferred: \(error.localizedDescription)",
+                source: "LicenseManager"
+            )
+        }
+    }
+
     // MARK: - Sign in
 
     func sendCode(to email: String) async {
