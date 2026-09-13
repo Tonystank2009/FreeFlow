@@ -404,7 +404,7 @@ struct SpokenlyBar: View {
     let isActive: Bool
 
     var body: some View {
-        RoundedRectangle(cornerRadius: self.config.barWidth / 2)
+        RoundedRectangle(cornerRadius: self.config.barWidth / 2, style: .continuous)
             .fill(Color.white)
             .frame(width: self.config.barWidth, height: self.height)
             .opacity(self.opacity)

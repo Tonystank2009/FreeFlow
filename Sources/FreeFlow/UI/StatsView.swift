@@ -349,11 +349,11 @@ struct StatsView: View {
                                 // Bar (avoid division by zero)
                                 let height = (item.words > 0 && maxWords > 0) ? CGFloat(item.words) / CGFloat(maxWords) *
                                     80 : 2
-                                RoundedRectangle(cornerRadius: 3)
+                                RoundedRectangle(cornerRadius: 3, style: .continuous)
                                     .fill(item.words > 0 ? self.theme.palette.accent : Color.secondary.opacity(0.2))
                                     .frame(width: self.chartDays == 7 ? 30 : 8, height: max(2, height))
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 3)
+                                        RoundedRectangle(cornerRadius: 3, style: .continuous)
                                             .stroke(self.hoveredActivityIndex == index ? self.theme.palette.accent.opacity(0.65) : Color.clear, lineWidth: 1)
                                     )
                                     .overlay(alignment: .top) {
@@ -415,12 +415,12 @@ struct StatsView: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
         .background(
-            RoundedRectangle(cornerRadius: 6)
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(self.theme.palette.cardBackground)
                 .shadow(color: .black.opacity(0.18), radius: 8, y: 3)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 6)
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .stroke(self.theme.palette.cardBorder.opacity(0.6), lineWidth: 1)
         )
         .fixedSize()
@@ -487,7 +487,7 @@ struct StatsView: View {
                 .padding(.horizontal, 6)
                 .padding(.vertical, 3)
                 .background(
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: 4, style: .continuous)
                         .fill(milestone.achieved ? self.theme.palette.success.opacity(0.1) : Color.clear)
                 )
             }
@@ -566,7 +566,7 @@ struct StatsView: View {
             Spacer()
         }
         .padding(10)
-        .background(RoundedRectangle(cornerRadius: 8)
+        .background(RoundedRectangle(cornerRadius: 8, style: .continuous)
             .fill(.quaternary.opacity(0.3)))
     }
 
@@ -612,10 +612,10 @@ struct StatsView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .fill(self.theme.palette.cardBackground)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
                         .stroke(self.theme.palette.cardBorder.opacity(0.45), lineWidth: 1)
                 )
         )

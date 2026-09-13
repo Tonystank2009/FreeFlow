@@ -109,7 +109,7 @@ struct FluidIconFilled: View {
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: self.cornerRadius)
+            RoundedRectangle(cornerRadius: self.cornerRadius, style: .continuous)
                 .fill(self.backgroundColor)
                 .frame(width: self.size, height: self.size)
 

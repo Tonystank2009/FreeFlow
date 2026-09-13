@@ -683,7 +683,7 @@ struct NotchExpandedView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 18, height: 18)
-                .clipShape(RoundedRectangle(cornerRadius: 3))
+                .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
         }
     }
 
@@ -748,10 +748,10 @@ struct NotchExpandedView: View {
             strokeColor = .clear
         }
 
-        return RoundedRectangle(cornerRadius: 7)
+        return RoundedRectangle(cornerRadius: 7, style: .continuous)
             .fill(fillColor)
             .overlay(
-                RoundedRectangle(cornerRadius: 7)
+                RoundedRectangle(cornerRadius: 7, style: .continuous)
                     .stroke(strokeColor, lineWidth: 1)
             )
     }
@@ -870,9 +870,9 @@ struct NotchExpandedView: View {
         }
         .padding(3)
         .background(Color.black)
-        .clipShape(RoundedRectangle(cornerRadius: 9))
+        .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 9)
+            RoundedRectangle(cornerRadius: 9, style: .continuous)
                 .stroke(Color.white.opacity(0.12), lineWidth: 1)
         )
         .shadow(color: .black.opacity(0.24), radius: 8, x: 0, y: 5)
@@ -1191,7 +1191,7 @@ struct NotchWaveformView: View {
     private func barsView(using height: @escaping (Int) -> CGFloat) -> some View {
         HStack(spacing: self.barSpacing) {
             ForEach(0..<self.barCount, id: \.self) { index in
-                RoundedRectangle(cornerRadius: self.barWidth / 2)
+                RoundedRectangle(cornerRadius: self.barWidth / 2, style: .continuous)
                     .frame(width: self.barWidth, height: height(index))
                     .shadow(color: self.color.opacity(self.currentGlowIntensity), radius: self.currentGlowRadius, x: 0, y: 0)
                     .shadow(color: self.color.opacity(self.currentGlowIntensity * 0.5), radius: self.currentOuterGlowRadius, x: 0, y: 0)
@@ -1256,7 +1256,7 @@ struct NotchCompactLeadingView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 16, height: 16)
-                    .clipShape(RoundedRectangle(cornerRadius: 3))
+                    .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
             } else {
                 Circle()
                     .fill(self.contentState.mode.notchColor.opacity(0.9))
@@ -1419,7 +1419,7 @@ struct NotchCommandOutputExpandedView: View {
         }
         .frame(width: 380, height: self.dynamicHeight)
         .background(Color.black)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .animation(.spring(response: 0.3, dampingFraction: 0.8), value: self.contentState.commandConversationHistory.count)
         // No animation on streamingText - it updates too frequently, animations add overhead
         .animation(.spring(response: 0.25, dampingFraction: 0.8), value: self.contentState.isRecordingInExpandedMode)
@@ -1439,7 +1439,7 @@ struct NotchCommandOutputExpandedView: View {
                     // Static indicator when not recording
                     HStack(spacing: 3) {
                         ForEach(0..<5, id: \.self) { _ in
-                            RoundedRectangle(cornerRadius: 1.5)
+                            RoundedRectangle(cornerRadius: 1.5, style: .continuous)
                                 .fill(self.commandRed.opacity(0.4))
                                 .frame(width: 3, height: 6)
                         }
@@ -1816,7 +1816,7 @@ struct ExpandedModeWaveformView: View {
     var body: some View {
         HStack(spacing: self.barSpacing) {
             ForEach(0..<self.barCount, id: \.self) { index in
-                RoundedRectangle(cornerRadius: self.barWidth / 2)
+                RoundedRectangle(cornerRadius: self.barWidth / 2, style: .continuous)
                     .fill(self.color)
                     .frame(width: self.barWidth, height: self.barHeights[index])
                     .shadow(color: self.color.opacity(0.4), radius: 2, x: 0, y: 0)
@@ -1921,7 +1921,7 @@ struct CompactNotchWaveformView: View {
     private func barsView(using height: @escaping (Int) -> CGFloat) -> some View {
         HStack(spacing: self.barSpacing) {
             ForEach(0..<self.barCount, id: \.self) { index in
-                RoundedRectangle(cornerRadius: self.barWidth / 2)
+                RoundedRectangle(cornerRadius: self.barWidth / 2, style: .continuous)
                     .frame(width: self.barWidth, height: height(index))
             }
         }

@@ -448,7 +448,7 @@ struct CommandModeView: View {
             .background(self.theme.palette.contentBackground)
             .cornerRadius(8)
             .overlay(
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .stroke(Color.orange.opacity(0.5), lineWidth: 1)
             )
 

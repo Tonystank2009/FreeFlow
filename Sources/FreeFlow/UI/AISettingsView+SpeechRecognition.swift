@@ -36,10 +36,10 @@ extension VoiceEngineSettingsView {
                 self.modelStatsPanel
                     .padding(12)
                     .background(
-                        RoundedRectangle(cornerRadius: 12)
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
                             .fill(self.theme.palette.contentBackground.opacity(0.6))
                             .overlay(
-                                RoundedRectangle(cornerRadius: 12)
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
                                     .stroke(self.theme.palette.cardBorder.opacity(0.3), lineWidth: 1)
                             )
                             .shadow(color: self.theme.metrics.cardShadow.color.opacity(self.theme.metrics.cardShadow.opacity), radius: self.theme.metrics.cardShadow.radius, x: self.theme.metrics.cardShadow.x, y: self.theme.metrics.cardShadow.y)
@@ -72,10 +72,10 @@ extension VoiceEngineSettingsView {
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 6)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 9)
+                                    RoundedRectangle(cornerRadius: 9, style: .continuous)
                                         .fill(self.theme.palette.cardBackground.opacity(0.8))
                                         .overlay(
-                                            RoundedRectangle(cornerRadius: 9)
+                                            RoundedRectangle(cornerRadius: 9, style: .continuous)
                                                 .stroke(self.theme.palette.cardBorder.opacity(0.5), lineWidth: 1)
                                         )
                                 )
@@ -95,10 +95,10 @@ extension VoiceEngineSettingsView {
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 6)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 9)
+                                    RoundedRectangle(cornerRadius: 9, style: .continuous)
                                         .fill(self.theme.palette.cardBackground.opacity(0.8))
                                         .overlay(
-                                            RoundedRectangle(cornerRadius: 9)
+                                            RoundedRectangle(cornerRadius: 9, style: .continuous)
                                                 .stroke(self.theme.palette.cardBorder.opacity(0.5), lineWidth: 1)
                                         )
                                 )
@@ -140,10 +140,10 @@ extension VoiceEngineSettingsView {
                         }
                         .padding(12)
                         .background(
-                            RoundedRectangle(cornerRadius: 12)
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
                                 .fill(self.theme.palette.cardBackground.opacity(0.9))
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
                                         .stroke(self.theme.palette.cardBorder.opacity(0.3), lineWidth: 1)
                                 )
                                 .shadow(color: self.theme.metrics.cardShadow.color.opacity(self.theme.metrics.cardShadow.opacity), radius: self.theme.metrics.cardShadow.radius, x: self.theme.metrics.cardShadow.x, y: self.theme.metrics.cardShadow.y)
@@ -238,10 +238,10 @@ extension VoiceEngineSettingsView {
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(
-                            RoundedRectangle(cornerRadius: 6)
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .fill(.orange.opacity(0.1))
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 6)
+                                    RoundedRectangle(cornerRadius: 6, style: .continuous)
                                         .stroke(.orange.opacity(0.3), lineWidth: 1)
                                 )
                         )
@@ -293,10 +293,10 @@ extension VoiceEngineSettingsView {
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
                 .background(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
                         .fill(Color.appAccent.opacity(0.10))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 8)
+                            RoundedRectangle(cornerRadius: 8, style: .continuous)
                                 .stroke(Color.appAccent.opacity(0.30), lineWidth: 1)
                         )
                 )
@@ -528,14 +528,14 @@ extension VoiceEngineSettingsView {
         .contentShape(Rectangle())
         .animation(.easeInOut(duration: 0.2), value: isSelected)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .fill(isSelected ? self.theme.palette.cardBackground.opacity(0.8) : .clear)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
                         .stroke(isSelected ? self.theme.palette.cardBorder.opacity(0.6) : self.theme.palette.cardBorder.opacity(0.25), lineWidth: 1)
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
                         .stroke(isActive ? Color.appAccent.opacity(0.9) : .clear, lineWidth: 2)
                 )
         )
@@ -825,9 +825,9 @@ extension VoiceEngineSettingsView {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(RoundedRectangle(cornerRadius: 8)
+        .background(RoundedRectangle(cornerRadius: 8, style: .continuous)
             .fill(self.theme.palette.cardBackground.opacity(0.8))
-            .overlay(RoundedRectangle(cornerRadius: 8).stroke(self.theme.palette.cardBorder.opacity(0.5), lineWidth: 1)))
+            .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).stroke(self.theme.palette.cardBorder.opacity(0.5), lineWidth: 1)))
     }
 
     var fillerWordsSection: some View {

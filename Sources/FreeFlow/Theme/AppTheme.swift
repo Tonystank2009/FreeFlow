@@ -92,9 +92,9 @@ struct AppTheme {
             let pill: CGFloat
 
             static let standard = CornerRadius(
-                sm: 6,
-                md: 10,
-                lg: 16,
+                sm: 8,
+                md: 12,
+                lg: 18,
                 pill: 999
             )
         }
@@ -330,15 +330,19 @@ struct AppTheme {
     static func dark(accent: Color) -> AppTheme {
         AppTheme(
             palette: Palette(
-                windowBackground: Color(red: 0.07, green: 0.07, blue: 0.07),
-                contentBackground: Color(red: 0.09, green: 0.09, blue: 0.09),
-                sidebarBackground: Color(red: 0.06, green: 0.06, blue: 0.06),
-                cardBackground: Color(red: 0.08, green: 0.08, blue: 0.08),
-                elevatedCardBackground: Color(red: 0.11, green: 0.11, blue: 0.11),
-                toolbarBackground: Color(red: 0.06, green: 0.06, blue: 0.06),
+                // macOS system greys. The slight cool cast and the spacing
+                // between levels are what make one surface read as sitting
+                // above another; an evenly spaced neutral ramp reads flat no
+                // matter how many steps it has.
+                windowBackground: Color(red: 0.110, green: 0.110, blue: 0.118),
+                contentBackground: Color(red: 0.110, green: 0.110, blue: 0.118),
+                sidebarBackground: Color(red: 0.086, green: 0.086, blue: 0.094),
+                cardBackground: Color(red: 0.173, green: 0.173, blue: 0.180),
+                elevatedCardBackground: Color(red: 0.227, green: 0.227, blue: 0.235),
+                toolbarBackground: Color(red: 0.086, green: 0.086, blue: 0.094),
 
-                cardBorder: Color.white.opacity(0.10),
-                separator: Color.white.opacity(0.16),
+                cardBorder: Color.white.opacity(0.08),
+                separator: Color.white.opacity(0.12),
                 primaryText: Color(nsColor: .labelColor),
                 secondaryText: Color(nsColor: .secondaryLabelColor),
                 tertiaryText: Color(nsColor: .tertiaryLabelColor),

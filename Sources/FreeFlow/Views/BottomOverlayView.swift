@@ -1363,10 +1363,10 @@ private struct BottomOverlayModeMenuView: View {
             strokeColor = Color.clear
         }
 
-        return RoundedRectangle(cornerRadius: 7)
+        return RoundedRectangle(cornerRadius: 7, style: .continuous)
             .fill(fillColor)
             .overlay(
-                RoundedRectangle(cornerRadius: 7)
+                RoundedRectangle(cornerRadius: 7, style: .continuous)
                     .stroke(strokeColor, lineWidth: 1)
             )
     }
@@ -1424,7 +1424,7 @@ private struct BottomOverlayModeMenuView: View {
         .background(Color.black)
         .cornerRadius(8)
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .stroke(Color.white.opacity(0.12), lineWidth: 1)
         )
         .frame(maxWidth: self.maxWidth)
@@ -1469,10 +1469,10 @@ private struct BottomOverlayPromptMenuView: View {
             strokeColor = Color.clear
         }
 
-        return RoundedRectangle(cornerRadius: 7)
+        return RoundedRectangle(cornerRadius: 7, style: .continuous)
             .fill(fillColor)
             .overlay(
-                RoundedRectangle(cornerRadius: 7)
+                RoundedRectangle(cornerRadius: 7, style: .continuous)
                     .stroke(strokeColor, lineWidth: 1)
             )
     }
@@ -1720,7 +1720,7 @@ private struct BottomOverlayPromptMenuView: View {
         .background(Color.black)
         .cornerRadius(8)
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .stroke(Color.white.opacity(0.12), lineWidth: 1)
         )
         .frame(width: min(self.maxWidth, 250), alignment: .leading)
@@ -1804,10 +1804,10 @@ private struct BottomOverlayActionsMenuView: View {
             strokeColor = Color.clear
         }
 
-        return RoundedRectangle(cornerRadius: 7)
+        return RoundedRectangle(cornerRadius: 7, style: .continuous)
             .fill(fillColor)
             .overlay(
-                RoundedRectangle(cornerRadius: 7)
+                RoundedRectangle(cornerRadius: 7, style: .continuous)
                     .stroke(strokeColor, lineWidth: 1)
             )
     }
@@ -1942,7 +1942,7 @@ private struct BottomOverlayActionsMenuView: View {
         .background(Color.black)
         .cornerRadius(8)
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .stroke(Color.white.opacity(0.12), lineWidth: 1)
         )
         .frame(maxWidth: self.maxWidth)
@@ -2622,10 +2622,10 @@ struct BottomOverlayView: View {
         let bottomStrokeOpacity: Double = disabled ? 0.06 : (isHovered ? 0.22 : 0.08)
         let hoverShadowColor: Color = (isHovered && !disabled) ? Color.white.opacity(0.16) : .clear
 
-        return RoundedRectangle(cornerRadius: self.promptSelectorCornerRadius)
+        return RoundedRectangle(cornerRadius: self.promptSelectorCornerRadius, style: .continuous)
             .fill(fillColor)
             .overlay(
-                RoundedRectangle(cornerRadius: self.promptSelectorCornerRadius)
+                RoundedRectangle(cornerRadius: self.promptSelectorCornerRadius, style: .continuous)
                     .strokeBorder(
                         LinearGradient(
                             colors: [
@@ -3033,7 +3033,7 @@ struct BottomOverlayView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: self.layout.iconSize, height: self.layout.iconSize)
-                    .clipShape(RoundedRectangle(cornerRadius: self.layout.iconSize / 4))
+                    .clipShape(RoundedRectangle(cornerRadius: self.layout.iconSize / 4, style: .continuous))
             } else if !self.layout.showsModeLabel {
                 Circle()
                     .fill(self.modeColor.opacity(0.9))
@@ -3624,7 +3624,7 @@ struct BottomWaveformView: View {
     private var barsView: some View {
         HStack(spacing: self.barSpacing) {
             ForEach(0..<self.barCount, id: \.self) { index in
-                RoundedRectangle(cornerRadius: self.barWidth / 2)
+                RoundedRectangle(cornerRadius: self.barWidth / 2, style: .continuous)
                     .frame(width: self.barWidth, height: self.displayHeight(at: index))
                     .shadow(
                         color: self.color.opacity(self.isReleaseAnimationActive ? 0 : self.currentGlowIntensity),

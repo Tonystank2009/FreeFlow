@@ -111,9 +111,9 @@ struct TranscriptionHistoryView: View {
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
-        .background(RoundedRectangle(cornerRadius: 8)
+        .background(RoundedRectangle(cornerRadius: 8, style: .continuous)
             .fill(self.theme.palette.cardBackground)
-            .overlay(RoundedRectangle(cornerRadius: 8)
+            .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .stroke(self.theme.palette.cardBorder.opacity(0.6), lineWidth: 1)))
     }
 
@@ -154,7 +154,7 @@ struct TranscriptionHistoryView: View {
                             .padding(.horizontal, 4)
                             .padding(.vertical, 1)
                             .background(
-                                RoundedRectangle(cornerRadius: 3)
+                                RoundedRectangle(cornerRadius: 3, style: .continuous)
                                     .fill(isSelected ? .white.opacity(0.2) : self.theme.palette.accent.opacity(0.15))
                             )
                     }
@@ -191,7 +191,7 @@ struct TranscriptionHistoryView: View {
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(isSelected ? self.theme.palette.accent : Color.clear)
             )
             .contentShape(Rectangle())
@@ -494,7 +494,7 @@ struct TranscriptionHistoryView: View {
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
                         .background(
-                            RoundedRectangle(cornerRadius: 4)
+                            RoundedRectangle(cornerRadius: 4, style: .continuous)
                                 .fill(self.theme.palette.accent.opacity(0.15))
                         )
                 }
@@ -506,9 +506,9 @@ struct TranscriptionHistoryView: View {
                 .textSelection(.enabled)
                 .padding(14)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(RoundedRectangle(cornerRadius: 10)
+                .background(RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .fill(self.theme.palette.cardBackground)
-                    .overlay(RoundedRectangle(cornerRadius: 10)
+                    .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .stroke(self.theme.palette.cardBorder.opacity(isSecondary ? 0.35 : 0.5), lineWidth: 1)))
         }
     }
@@ -555,7 +555,7 @@ struct TranscriptionHistoryView: View {
             Spacer()
         }
         .padding(10)
-        .background(RoundedRectangle(cornerRadius: 8)
+        .background(RoundedRectangle(cornerRadius: 8, style: .continuous)
             .fill(self.theme.palette.cardBackground.opacity(0.9)))
     }
 
@@ -744,10 +744,10 @@ private struct TranscriptionFeedbackReportSheet: View {
                 .padding(8)
                 .frame(height: height)
                 .background(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
                         .fill(self.theme.palette.cardBackground)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 8)
+                            RoundedRectangle(cornerRadius: 8, style: .continuous)
                                 .stroke(self.theme.palette.cardBorder.opacity(0.55), lineWidth: 1)
                         )
                 )

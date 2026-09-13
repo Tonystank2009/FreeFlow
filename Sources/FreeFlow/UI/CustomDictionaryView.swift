@@ -3331,7 +3331,7 @@ struct DictionaryEntryRow: View {
                         .font(self.theme.typography.caption)
                         .padding(.horizontal, 6)
                         .padding(.vertical, 3)
-                        .background(RoundedRectangle(cornerRadius: 4).fill(.quaternary))
+                        .background(RoundedRectangle(cornerRadius: 4, style: .continuous).fill(.quaternary))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -3529,7 +3529,7 @@ struct AddDictionaryEntrySheet: View {
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 3)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 4).fill(
+                                    RoundedRectangle(cornerRadius: 4, style: .continuous).fill(
                                         self.duplicateTriggers.contains(trigger)
                                             ? AnyShapeStyle(Color.orange.opacity(0.3))
                                             : AnyShapeStyle(.quaternary)
@@ -3681,7 +3681,7 @@ struct EditDictionaryEntrySheet: View {
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 3)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 4).fill(
+                                    RoundedRectangle(cornerRadius: 4, style: .continuous).fill(
                                         self.duplicateTriggers.contains(trigger)
                                             ? AnyShapeStyle(Color.orange.opacity(0.3))
                                             : AnyShapeStyle(.quaternary)

@@ -141,9 +141,9 @@ struct FeedbackView: View {
                                 .font(.system(size: 14))
                                 .frame(height: 120)
                                 .padding(12)
-                                .background(RoundedRectangle(cornerRadius: 8)
+                                .background(RoundedRectangle(cornerRadius: 8, style: .continuous)
                                     .fill(self.theme.palette.contentBackground)
-                                    .overlay(RoundedRectangle(cornerRadius: 8)
+                                    .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous)
                                         .strokeBorder(self.theme.palette.cardBorder.opacity(0.45), lineWidth: 1.2)))
                                 .scrollContentBackground(.hidden)
                                 .overlay(

@@ -207,8 +207,8 @@ extension AIEnhancementSettingsView {
         }
         .padding(12)
         .background(.orange.opacity(0.12))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .overlay(RoundedRectangle(cornerRadius: 8).stroke(.orange.opacity(0.3), lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).stroke(.orange.opacity(0.3), lineWidth: 1))
         .padding(.horizontal, 4)
     }
 
@@ -2283,8 +2283,8 @@ extension AIEnhancementSettingsView {
         }
         .font(.caption).foregroundStyle(Color.appAccent)
         .padding(.horizontal, 12).padding(.vertical, 8)
-        .background(RoundedRectangle(cornerRadius: 8).fill(Color.appAccent.opacity(0.15))
-            .overlay(RoundedRectangle(cornerRadius: 8).stroke(
+        .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Color.appAccent.opacity(0.15))
+            .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).stroke(
                 Color.appAccent.opacity(0.3),
                 lineWidth: 1
             )))

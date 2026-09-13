@@ -264,7 +264,7 @@ struct MeetingTranscriptionView: View {
                         )
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 12)
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .strokeBorder(style: StrokeStyle(lineWidth: 2, dash: [8]))
                         .foregroundColor(Color.appAccent.opacity(self.isDropTargeted ? 0.7 : 0.3))
                 )

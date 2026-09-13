@@ -2971,11 +2971,11 @@ struct AnalyticsConfirmationView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(12)
                 .background(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
                         .fill(self.theme.palette.cardBackground)
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
                         .stroke(self.theme.palette.cardBorder.opacity(0.6), lineWidth: 1)
                 )
 
