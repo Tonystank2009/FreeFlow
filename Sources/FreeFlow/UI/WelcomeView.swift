@@ -358,6 +358,8 @@ struct OnboardingFlowView: View {
     @State private var hoveredFooterButton: OnboardingFooterButton?
     @State private var isShowingAllLanguages = false
     @State private var isShowingOtherModelRoutes = false
+    @State private var hasStartedAutomaticModelSetup = false
+    @State private var automaticSetupDidFail = false
     @State private var preparingModelRouteID: String?
     @State private var uninstallingModelRouteID: String?
     @State private var modelPreparationTask: Task<Void, Never>?
@@ -1335,12 +1337,14 @@ struct OnboardingFlowView: View {
                     FluidOnboardingCompactProgress(value: self.compactProgressValue)
                         .padding(.top, 28)
 
-                    ScrollView(.vertical, showsIndicators: self.isShowingOtherModelRoutes) {
+                    ScrollView(.vertical, showsIndicators: false) {
                         VStack(spacing: 0) {
                             FluidOnboardingCompactAppIconMark(size: 66)
                                 .padding(.bottom, 22)
 
-                            Text("Choose your\nvoice engine")
+                            Text(self.isVoiceModelReady
+                                ? "Your voice engine\nis ready"
+                                : "Setting up\nyour voice engine")
                                 .font(.system(size: 28, weight: .semibold))
                                 .foregroundStyle(.white)
                                 .multilineTextAlignment(.center)
@@ -1348,10 +1352,14 @@ struct OnboardingFlowView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                                 .padding(.bottom, 16)
 
-                            Text(self.recommendedModelReasonText)
+                            Text(self.isVoiceModelReady
+                                ? "Transcription runs entirely on your Mac. Nothing you say is uploaded."
+                                : "We're downloading a local speech model so transcription runs entirely on your Mac.")
                                 .font(.system(size: 15, weight: .medium))
                                 .foregroundStyle(Color.white.opacity(0.62))
                                 .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(maxWidth: 420)
                                 .padding(.bottom, 14)
 
                             Text(self.selectedOnboardingLanguage.displayName)
@@ -1364,66 +1372,15 @@ struct OnboardingFlowView: View {
                                         .fill(FluidOnboardingLandingColors.blue.opacity(0.12))
                                         .overlay(Capsule().stroke(FluidOnboardingLandingColors.blue.opacity(0.24), lineWidth: 1))
                                 )
-                                .padding(.bottom, 18)
+                                .padding(.bottom, 22)
 
-                            VStack(spacing: 10) {
-                                let defaultRoutes = self.defaultDisplayedModelRoutes
-                                if defaultRoutes.count == 1, let route = defaultRoutes.first {
-                                    self.onboardingRouteCard(for: route)
-                                } else if !defaultRoutes.isEmpty {
-                                    HStack(spacing: 16) {
-                                        ForEach(defaultRoutes) { route in
-                                            self.onboardingRouteCard(for: route)
-                                        }
-                                    }
-                                }
-
-                                if !self.otherModelRoutes.isEmpty {
-                                    self.otherModelRoutesToggleButton
-                                }
-
-                                if self.isShowingOtherModelRoutes {
-                                    LazyVGrid(
-                                        columns: [
-                                            GridItem(.fixed(292), spacing: 16, alignment: .top),
-                                            GridItem(.fixed(292), spacing: 16, alignment: .top),
-                                        ],
-                                        spacing: 16
-                                    ) {
-                                        ForEach(self.otherModelRoutes) { route in
-                                            self.onboardingRouteCard(for: route, enablesHover: false)
-                                        }
-                                    }
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 2)
-                            .transaction { transaction in
-                                transaction.animation = nil
-                            }
-                            .frame(width: 608)
-
-                            if self.isModelPreparationInProgress {
-                                Label("Initial preparation can take a while to get your Mac ready for near-instant transcription.", systemImage: "clock.arrow.circlepath")
-                                    .font(self.theme.typography.captionStrong)
-                                    .foregroundStyle(Color.white.opacity(0.58))
-                                    .labelStyle(.titleAndIcon)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.86)
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 5)
-                                    .background(
-                                        Capsule()
-                                            .fill(Color.white.opacity(0.06))
-                                            .overlay(Capsule().stroke(Color.white.opacity(0.10), lineWidth: 1))
-                                    )
-                                    .padding(.top, 14)
-                            }
+                            self.automaticModelSetupCard
+                                .frame(width: 420)
 
                             Text("You can switch models later in Voice Engine settings.")
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundStyle(Color.white.opacity(0.44))
-                                .padding(.top, self.isModelPreparationInProgress ? 8 : 18)
+                                .padding(.top, 18)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.top, 30)
@@ -1450,7 +1407,114 @@ struct OnboardingFlowView: View {
                 .accessibilityHidden(true)
             }
         }
+        .onAppear { self.startAutomaticModelSetupIfNeeded() }
+        .onChange(of: self.selectedLanguageID) { _, _ in
+            // A different language means a different recommended model.
+            self.hasStartedAutomaticModelSetup = false
+            self.startAutomaticModelSetupIfNeeded()
+        }
     }
+
+    /// Status card for the automatic local-model download.
+    ///
+    /// Onboarding no longer asks which engine to use. It picks the recommended
+    /// on-device model, fetches it, and reports progress — one less decision
+    /// before a user has any basis for making it.
+    private var automaticModelSetupCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 10) {
+                Image(systemName: self.automaticSetupIconName)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(
+                        self.isVoiceModelReady
+                            ? Color.green
+                            : FluidOnboardingLandingColors.blue
+                    )
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(self.recommendedOnboardingModel.displayName)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.white)
+
+                    Text(self.automaticSetupSubtitle)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(Color.white.opacity(0.56))
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer(minLength: 0)
+            }
+
+            if !self.isVoiceModelReady {
+                if let progress = self.asr.downloadProgress, self.asr.isDownloadingModel {
+                    ProgressView(value: progress)
+                        .tint(FluidOnboardingLandingColors.blue)
+                } else {
+                    ProgressView()
+                        .progressViewStyle(.linear)
+                        .tint(FluidOnboardingLandingColors.blue)
+                }
+            }
+
+            if self.automaticSetupDidFail {
+                Button {
+                    self.retryAutomaticModelSetup()
+                } label: {
+                    Text("Try again")
+                        .font(.system(size: 13, weight: .semibold))
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
+        .padding(18)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color.white.opacity(0.05))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .stroke(Color.white.opacity(0.10), lineWidth: 1)
+                )
+        )
+    }
+
+    private var automaticSetupIconName: String {
+        if self.isVoiceModelReady { return "checkmark.seal.fill" }
+        if self.automaticSetupDidFail { return "exclamationmark.triangle.fill" }
+        return "arrow.down.circle"
+    }
+
+    private var automaticSetupSubtitle: String {
+        if self.isVoiceModelReady {
+            return "Ready — runs offline on your Mac"
+        }
+        if self.automaticSetupDidFail {
+            return "Download failed. Check your connection and try again."
+        }
+        let status = self.asr.modelPreparationStatusText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !status.isEmpty { return status }
+        return "Preparing download…"
+    }
+
+    /// Kicks off the download once, without user input.
+    private func startAutomaticModelSetupIfNeeded() {
+        guard self.step == .voiceModel else { return }
+        guard !self.hasStartedAutomaticModelSetup else { return }
+        guard !self.isVoiceModelReady else { return }
+        guard !self.isModelPreparationInProgress else { return }
+        guard let route = self.primaryDisplayedModelRoute else { return }
+
+        self.hasStartedAutomaticModelSetup = true
+        self.automaticSetupDidFail = false
+        self.prepareOnboardingRoute(route)
+    }
+
+    private func retryAutomaticModelSetup() {
+        self.hasStartedAutomaticModelSetup = false
+        self.automaticSetupDidFail = false
+        self.startAutomaticModelSetupIfNeeded()
+    }
+
 
     private var permissionsStep: some View {
         GeometryReader { proxy in
@@ -1813,6 +1877,7 @@ struct OnboardingFlowView: View {
                 self.asr.errorTitle = "Voice Model Setup Failed"
                 self.asr.errorMessage = error.localizedDescription
                 self.asr.showError = true
+                self.automaticSetupDidFail = true
             }
             guard !Task.isCancelled else { return }
             await self.asr.checkIfModelsExistAsync()
