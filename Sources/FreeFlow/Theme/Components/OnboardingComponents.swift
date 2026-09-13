@@ -86,12 +86,12 @@ struct FreeFlowOnboardingLandingBackdrop: View {
 
     var body: some View {
         ZStack {
-            Color(red: 0.024, green: 0.018, blue: 0.043)
+            Color(red: 0.043, green: 0.043, blue: 0.047)
 
             RadialGradient(
                 colors: [
-                    FreeFlowOnboardingColors.accent.opacity(0.18),
-                    FreeFlowOnboardingColors.accentDeep.opacity(0.26),
+                    FreeFlowOnboardingColors.accent.opacity(0.10),
+                    Color(red: 0.09, green: 0.09, blue: 0.10).opacity(0.55),
                     .clear,
                 ],
                 center: self.glowCenter,
@@ -431,18 +431,19 @@ private struct FreeFlowOnboardingPortalGlow: View {
 
 /// FreeFlow's onboarding palette.
 ///
-/// One accent, matched to the app icon, used sparingly against near-monochrome
-/// surfaces. Restraint is the point: a second competing colour makes a screen
-/// look assembled rather than designed.
+/// Apple's own system colours, bridged from AppKit rather than hand-mixed, so
+/// they match native controls exactly and follow macOS's light/dark variants.
+/// One accent on interactive things; semantic colours only where they carry
+/// meaning. Everything else is neutral.
 enum FreeFlowOnboardingColors {
-    /// The single accent. Everything interactive and nothing else.
-    static let accent = Color(red: 0.42, green: 0.24, blue: 0.94)
-    static let accentBright = Color(red: 0.60, green: 0.38, blue: 1.0)
-    static let accentDeep = Color(red: 0.29, green: 0.16, blue: 0.64)
+    /// The system accent. Same blue as native macOS controls.
+    static let accent = Color(nsColor: .systemBlue)
+    static let accentBright = Color(nsColor: .systemBlue).opacity(0.92)
+    static let accentDeep = Color(nsColor: .systemBlue).opacity(0.45)
 
-    /// Reserved for cost. Used once, so it still means something.
-    static let caution = Color(red: 1.00, green: 0.45, blue: 0.33)
-    static let positive = Color(red: 0.24, green: 0.82, blue: 0.53)
+    /// Semantic only — these mean "cost" and "good", never decoration.
+    static let caution = Color(nsColor: .systemRed)
+    static let positive = Color(nsColor: .systemGreen)
 }
 
 private struct OnboardingSelectableSurfaceModifier: ViewModifier {

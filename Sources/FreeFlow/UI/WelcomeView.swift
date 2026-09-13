@@ -1631,15 +1631,14 @@ struct OnboardingFlowView: View {
                             FreeFlowOnboardingCompactAppIconMark(size: 66)
                                 .padding(.bottom, 22)
 
-                            Text("Five free.\nThen five dollars.")
-                                .font(.system(size: 28, weight: .semibold))
+                            Text("Try five tasks free.")
+                                .font(.system(size: 30, weight: .semibold))
                                 .foregroundStyle(.white)
                                 .multilineTextAlignment(.center)
-                                .lineSpacing(4)
                                 .fixedSize(horizontal: false, vertical: true)
-                                .padding(.bottom, 14)
+                                .padding(.bottom, 12)
 
-                            Text("Once. Not every month.")
+                            Text("Like it? $5 once — then it's yours forever.")
                                 .font(.system(size: 15, weight: .medium))
                                 .foregroundStyle(Color.white.opacity(0.62))
                                 .padding(.bottom, 24)
@@ -1647,7 +1646,7 @@ struct OnboardingFlowView: View {
                             self.priceComparison
                                 .frame(width: 560)
 
-                            Text("Every update included. No account needed to try it.")
+                            Text("No card to try it. No subscription, ever.")
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundStyle(Color.white.opacity(0.44))
                                 .padding(.top, 18)
@@ -1684,7 +1683,7 @@ struct OnboardingFlowView: View {
             self.priceCard(
                 name: Brand.appName,
                 price: "$5",
-                cadence: "once, forever",
+                cadence: "once, then free forever",
                 points: [
                     (true, "Runs on your Mac"),
                     (true, "Audio never leaves your device"),

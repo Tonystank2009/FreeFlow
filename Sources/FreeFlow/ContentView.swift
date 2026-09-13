@@ -4318,10 +4318,6 @@ extension ContentView {
         self.accessibilityEnabled
     }
 
-    private var onboardingAIReady: Bool {
-        self.settings.onboardingAISkipped || DictationAIPostProcessingGate.isProviderConfigured()
-    }
-
     private var onboardingPlaygroundReady: Bool {
         self.settings.onboardingPlaygroundValidated || self.settings.onboardingPlaygroundSkipped
     }
@@ -4351,7 +4347,7 @@ extension ContentView {
     }
 
     func completeOnboardingForAIProviderSetup() {
-        let missingRequirements = self.missingOnboardingCompletionRequirements(allowsAIConfiguration: true)
+        let missingRequirements = self.missingOnboardingCompletionRequirements()
         guard missingRequirements.isEmpty else {
             self.presentOnboardingCompletionBlocked(missingRequirements)
             return
@@ -4365,7 +4361,7 @@ extension ContentView {
         self.navigateToApp(target ?? .welcome)
     }
 
-    private func missingOnboardingCompletionRequirements(allowsAIConfiguration: Bool = false) -> [String] {
+    private func missingOnboardingCompletionRequirements() -> [String] {
         var missing: [String] = []
 
         if !self.onboardingVoiceModelReady {
@@ -4377,9 +4373,10 @@ extension ContentView {
         if !self.onboardingAccessibilityReady {
             missing.append("Accessibility access")
         }
-        if !allowsAIConfiguration, !self.onboardingAIReady {
-            missing.append("AI choice")
-        }
+        // No AI requirement: onboarding no longer asks. Leaving the old gate in
+        // made setup impossible to finish, because the flag it waited on could
+        // only ever be set by a step that no longer exists. AI enhancement is
+        // configured in settings, whenever the user wants it.
         if !self.onboardingPlaygroundReady {
             missing.append("test or skip")
         }
