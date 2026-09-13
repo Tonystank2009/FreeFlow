@@ -1548,7 +1548,7 @@ struct OnboardingFlowView: View {
                                     title: self.isMicrophoneReady ? "Microphone access allowed" : "Allow microphone",
                                     subtitle: self.isMicrophoneReady
                                         ? "Choose the microphone you want FreeFlow to use."
-                                        : "macOS will ask once. Click Allow to start dictating.",
+                                        : self.microphonePermissionSubtitle,
                                     systemImage: "mic.fill",
                                     isReady: self.isMicrophoneReady,
                                     actionTitle: self.microphoneActionButtonTitle
@@ -1742,14 +1742,25 @@ struct OnboardingFlowView: View {
         }
     }
 
+    private var microphonePermissionSubtitle: String {
+        switch self.asr.micStatus {
+        case .notDetermined:
+            return "macOS will ask once. Click Allow to start dictating."
+        default:
+            return "Microphone access was turned down. Open Settings, then switch on "
+                + "\(self.appDisplayName) under Privacy & Security → Microphone."
+        }
+    }
+
     private var microphoneActionButtonTitle: String {
         switch self.asr.micStatus {
         case .notDetermined:
             return "Allow"
-        case .denied, .restricted:
-            return "Open Settings"
         default:
-            return "Allow"
+            // Anything that isn't .notDetermined can only be resolved in System
+            // Settings — macOS will not prompt a second time. The label has to
+            // say so, or the button lies about what it does.
+            return "Open Settings"
         }
     }
 
@@ -2547,9 +2558,12 @@ struct OnboardingFlowView: View {
     }
 
     private func handleMicrophoneAction() {
-        if self.asr.micStatus == .notDetermined {
+        switch self.asr.micStatus {
+        case .notDetermined:
             self.asr.requestMicAccess()
-        } else {
+        case .authorized:
+            break
+        default:
             self.asr.openSystemSettingsForMic()
         }
     }
@@ -2638,12 +2652,16 @@ private extension OnboardingFlowView {
     }
 
     func refreshOnboardingMicrophoneAuthorization(checkModels: Bool = false) {
-        Task { @MainActor in
-            await AudioStartupGate.shared.scheduleOpenAfterInitialUISettled()
-            await AudioStartupGate.shared.waitUntilOpen()
-            guard self.isOnboardingFlowVisible else { return }
+        // Read authorisation immediately, ungated. This runs when the app
+        // regains focus — typically the moment the user comes back from System
+        // Settings — so waiting on the audio gate here made the screen look
+        // stuck on "not allowed" after they had just allowed it.
+        self.asr.refreshMicStatus()
 
-            self.asr.micStatus = AVCaptureDevice.authorizationStatus(for: .audio)
+        guard self.isOnboardingFlowVisible else { return }
+
+        Task { @MainActor in
+            // Only enumerating devices genuinely needs CoreAudio to be up.
             if self.step == .permissions, self.isMicrophoneReady {
                 self.refreshOnboardingMicrophones(startPreview: true)
             }

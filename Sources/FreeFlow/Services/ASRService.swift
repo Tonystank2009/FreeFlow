@@ -1501,14 +1501,17 @@ final class ASRService: ObservableObject {
         guard self.isRequestingMicrophoneAccess == false else { return }
         self.isRequestingMicrophoneAccess = true
         Task { @MainActor [weak self] in
-            await AudioStartupGate.shared.scheduleOpenAfterInitialUISettled()
-            await AudioStartupGate.shared.waitUntilOpen()
             guard let self else { return }
             guard self.isTerminating == false else {
                 self.isRequestingMicrophoneAccess = false
                 return
             }
 
+            // Deliberately NOT behind AudioStartupGate. This is a TCC call, not
+            // a CoreAudio one, and gating it meant the system prompt could be
+            // delayed or never fire at all — which also stops the app from ever
+            // appearing in System Settings > Microphone, leaving a user who
+            // denied once with no way back.
             AVCaptureDevice.requestAccess(for: .audio) { [weak self] granted in
                 guard let self else { return }
                 Task { @MainActor in
@@ -1684,6 +1687,17 @@ final class ASRService: ObservableObject {
         )
         self.activeAudioCaptureBackend = .none
         self.audioLevelSubject.send(0)
+    }
+
+    /// Re-reads microphone authorisation from the system.
+    ///
+    /// Called when the app regains focus so returning from System Settings
+    /// updates the UI immediately instead of looking stuck.
+    func refreshMicStatus() {
+        let current = AVCaptureDevice.authorizationStatus(for: .audio)
+        guard current != self.micStatus else { return }
+        self.micStatus = current
+        self.micPermissionGranted = (current == .authorized)
     }
 
     func openSystemSettingsForMic() {
