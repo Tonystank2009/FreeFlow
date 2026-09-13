@@ -400,7 +400,7 @@ struct OnboardingFlowView: View {
         case voiceModel = 2
         case permissions = 3
         case playground = 4
-        case aiEnhancement = 5
+        case pricing = 5
 
         var analyticsStep: AnalyticsOnboardingStep {
             switch self {
@@ -409,7 +409,7 @@ struct OnboardingFlowView: View {
             case .voiceModel: .voiceModel
             case .permissions: .permissions
             case .playground: .playground
-            case .aiEnhancement: .aiEnhancement
+            case .pricing: .pricing
             }
         }
 
@@ -423,8 +423,8 @@ struct OnboardingFlowView: View {
                 return "Choose Voice Engine"
             case .permissions:
                 return "Enable Access"
-            case .aiEnhancement:
-                return "Set Up AI Enhancement"
+            case .pricing:
+                return "Free to Try"
             case .playground:
                 return "Try FreeFlow"
             }
@@ -440,8 +440,8 @@ struct OnboardingFlowView: View {
                 return "Choose the best local engine for your language."
             case .permissions:
                 return "Allow FreeFlow to listen and type into other apps."
-            case .aiEnhancement:
-                return "Optional: Configure AI post-processing or skip this step."
+            case .pricing:
+                return "Five dictations free, then one payment."
             case .playground:
                 return "Use your dictation shortcut once before finishing setup."
             }
@@ -579,10 +579,6 @@ struct OnboardingFlowView: View {
         self.isMicrophoneReady && self.isAccessibilityReady
     }
 
-    private var isAIReady: Bool {
-        self.settings.onboardingAISkipped || DictationAIPostProcessingGate.isProviderConfigured()
-    }
-
     private var isPlaygroundReady: Bool {
         self.settings.onboardingPlaygroundValidated || self.settings.onboardingPlaygroundSkipped
     }
@@ -614,8 +610,8 @@ struct OnboardingFlowView: View {
             return self.isVoiceModelReady
         case .permissions:
             return self.isPermissionsReady
-        case .aiEnhancement:
-            return self.isAIReady
+        case .pricing:
+            return true
         case .playground:
             return self.isPlaygroundReady && !self.asr.isRunning && !self.isRecordingAnyShortcut
         }
@@ -627,8 +623,8 @@ struct OnboardingFlowView: View {
             return "Next"
         case .language:
             return "Continue"
-        case .aiEnhancement:
-            return "Finish Setup"
+        case .pricing:
+            return "Start Dictating"
         default:
             return "Continue"
         }
@@ -774,8 +770,8 @@ struct OnboardingFlowView: View {
             self.voiceModelStep
         case .permissions:
             self.permissionsStep
-        case .aiEnhancement:
-            self.aiEnhancementStep
+        case .pricing:
+            self.pricingStep
         case .playground:
             self.playgroundStep
         }
@@ -787,19 +783,19 @@ struct OnboardingFlowView: View {
 
             ZStack {
                 VStack(alignment: .center, spacing: self.theme.metrics.onboardingSurface.landing.sectionSpacing) {
-                    FluidOnboardingLandingHero(
+                    FreeFlowOnboardingLandingHero(
                         eyebrow: "",
                         title: "Just speak.",
                         accentTitle: "We'll handle the rest.",
                         firstDetail: "Accurate. Fast. Private. Free.",
                         secondDetail: "Built for creators, thinkers, and builders."
                     ) {
-                        FluidOnboardingLandingPrimaryButton(title: "Next") {
+                        FreeFlowOnboardingLandingPrimaryButton(title: "Next") {
                             self.goNext()
                         }
                         .frame(
-                            width: FluidOnboardingLandingPrimaryButton.size.width,
-                            height: FluidOnboardingLandingPrimaryButton.size.height
+                            width: FreeFlowOnboardingLandingPrimaryButton.size.width,
+                            height: FreeFlowOnboardingLandingPrimaryButton.size.height
                         )
                     }
                 }
@@ -810,7 +806,7 @@ struct OnboardingFlowView: View {
                 .padding(.horizontal, 24)
                 .padding(.vertical, 24)
 
-                FluidOnboardingLandingHoverTracker(
+                FreeFlowOnboardingLandingHoverTracker(
                     onMove: { location, size in
                         self.updateLandingGlow(location: location, in: size)
                     },
@@ -823,7 +819,7 @@ struct OnboardingFlowView: View {
                 .zIndex(-1)
             }
             .background {
-                FluidOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
+                FreeFlowOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
             }
         }
     }
@@ -871,15 +867,15 @@ struct OnboardingFlowView: View {
     private var languageStep: some View {
         GeometryReader { proxy in
             ZStack {
-                FluidOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
+                FreeFlowOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
 
                 VStack(spacing: 0) {
-                    FluidOnboardingCompactProgress(value: self.compactProgressValue)
+                    FreeFlowOnboardingCompactProgress(value: self.compactProgressValue)
                         .padding(.top, 28)
 
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(spacing: 0) {
-                            FluidOnboardingCompactAppIconMark(size: 66)
+                            FreeFlowOnboardingCompactAppIconMark(size: 66)
                                 .padding(.bottom, 22)
 
                             Text("What language will\nyou speak most?")
@@ -934,7 +930,7 @@ struct OnboardingFlowView: View {
                 }
                 .frame(width: proxy.size.width, height: proxy.size.height)
 
-                FluidOnboardingLandingHoverTracker(
+                FreeFlowOnboardingLandingHoverTracker(
                     onMove: { location, size in
                         self.updateLandingGlow(location: location, in: size)
                     },
@@ -956,14 +952,14 @@ struct OnboardingFlowView: View {
             ? (isHovered ? 0.15 : 0.075)
             : (isHovered ? 0.10 : 0.04)
         let borderColor = isSelected
-            ? FluidOnboardingLandingColors.blue.opacity(isHovered ? 1 : 0.92)
-            : (isHovered ? FluidOnboardingLandingColors.blue.opacity(0.58) : Color.white.opacity(0.10))
+            ? FreeFlowOnboardingColors.accent.opacity(isHovered ? 1 : 0.92)
+            : (isHovered ? FreeFlowOnboardingColors.accent.opacity(0.58) : Color.white.opacity(0.10))
         let borderWidth: CGFloat = isSelected
             ? (isHovered ? 1.8 : 1.4)
             : (isHovered ? 1.2 : 1)
         let shadowColor = isSelected
-            ? FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.36 : 0.18)
-            : FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.18 : 0)
+            ? FreeFlowOnboardingColors.accent.opacity(isHovered ? 0.36 : 0.18)
+            : FreeFlowOnboardingColors.accent.opacity(isHovered ? 0.18 : 0)
         let shadowRadius: CGFloat = isSelected
             ? (isHovered ? 24 : 18)
             : (isHovered ? 20 : 14)
@@ -974,7 +970,7 @@ struct OnboardingFlowView: View {
             HStack(spacing: 10) {
                 Image(systemName: "globe")
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(isSelected ? FluidOnboardingLandingColors.blue : Color.white.opacity(0.72))
+                    .foregroundStyle(isSelected ? FreeFlowOnboardingColors.accent : Color.white.opacity(0.72))
                     .frame(width: 22)
 
                 Text(language.popularDisplayName)
@@ -988,7 +984,7 @@ struct OnboardingFlowView: View {
                 if isSelected {
                     Image(systemName: "checkmark")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(FluidOnboardingLandingColors.blue)
+                        .foregroundStyle(FreeFlowOnboardingColors.accent)
                 }
             }
             .padding(.horizontal, 15)
@@ -1034,11 +1030,11 @@ struct OnboardingFlowView: View {
             ? (isHovered ? 0.15 : 0.075)
             : (isHovered ? 0.10 : 0.04)
         let borderColor = isSelected
-            ? FluidOnboardingLandingColors.blue.opacity(isHovered ? 1 : 0.92)
-            : (isHovered ? FluidOnboardingLandingColors.blue.opacity(0.58) : Color.white.opacity(self.isShowingAllLanguages ? 0.16 : 0.10))
+            ? FreeFlowOnboardingColors.accent.opacity(isHovered ? 1 : 0.92)
+            : (isHovered ? FreeFlowOnboardingColors.accent.opacity(0.58) : Color.white.opacity(self.isShowingAllLanguages ? 0.16 : 0.10))
         let shadowColor = isSelected
-            ? FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.36 : 0.18)
-            : FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.18 : 0)
+            ? FreeFlowOnboardingColors.accent.opacity(isHovered ? 0.36 : 0.18)
+            : FreeFlowOnboardingColors.accent.opacity(isHovered ? 0.18 : 0)
 
         return Button {
             self.toggleAllLanguagesPicker()
@@ -1046,7 +1042,7 @@ struct OnboardingFlowView: View {
             HStack(spacing: 10) {
                 Image(systemName: "ellipsis")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(isSelected ? FluidOnboardingLandingColors.blue : Color.white.opacity(self.isShowingAllLanguages ? 0.78 : 0.72))
+                    .foregroundStyle(isSelected ? FreeFlowOnboardingColors.accent : Color.white.opacity(self.isShowingAllLanguages ? 0.78 : 0.72))
                     .frame(width: 22)
 
                 Text(isSelected ? self.selectedOnboardingLanguage.displayName : "Other")
@@ -1155,14 +1151,14 @@ struct OnboardingFlowView: View {
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 13, weight: .bold))
-                        .foregroundStyle(FluidOnboardingLandingColors.blue)
+                        .foregroundStyle(FreeFlowOnboardingColors.accent)
                 }
             }
             .padding(.horizontal, 10)
             .frame(height: 34)
             .background(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(isSelected ? FluidOnboardingLandingColors.blue.opacity(0.14) : Color.white.opacity(0.045))
+                    .fill(isSelected ? FreeFlowOnboardingColors.accent.opacity(0.14) : Color.white.opacity(0.045))
             )
             .contentShape(Rectangle())
         }
@@ -1331,15 +1327,15 @@ struct OnboardingFlowView: View {
     private var voiceModelStep: some View {
         GeometryReader { proxy in
             ZStack {
-                FluidOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
+                FreeFlowOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
 
                 VStack(spacing: 0) {
-                    FluidOnboardingCompactProgress(value: self.compactProgressValue)
+                    FreeFlowOnboardingCompactProgress(value: self.compactProgressValue)
                         .padding(.top, 28)
 
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(spacing: 0) {
-                            FluidOnboardingCompactAppIconMark(size: 66)
+                            FreeFlowOnboardingCompactAppIconMark(size: 66)
                                 .padding(.bottom, 22)
 
                             Text(self.isVoiceModelReady
@@ -1364,13 +1360,13 @@ struct OnboardingFlowView: View {
 
                             Text(self.selectedOnboardingLanguage.displayName)
                                 .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(FluidOnboardingLandingColors.blue)
+                                .foregroundStyle(FreeFlowOnboardingColors.accent)
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 6)
                                 .background(
                                     Capsule()
-                                        .fill(FluidOnboardingLandingColors.blue.opacity(0.12))
-                                        .overlay(Capsule().stroke(FluidOnboardingLandingColors.blue.opacity(0.24), lineWidth: 1))
+                                        .fill(FreeFlowOnboardingColors.accent.opacity(0.12))
+                                        .overlay(Capsule().stroke(FreeFlowOnboardingColors.accent.opacity(0.24), lineWidth: 1))
                                 )
                                 .padding(.bottom, 22)
 
@@ -1395,7 +1391,7 @@ struct OnboardingFlowView: View {
                     }
                 }
 
-                FluidOnboardingLandingHoverTracker(
+                FreeFlowOnboardingLandingHoverTracker(
                     onMove: { location, size in
                         self.updateLandingGlow(location: location, in: size)
                     },
@@ -1428,7 +1424,7 @@ struct OnboardingFlowView: View {
                     .foregroundStyle(
                         self.isVoiceModelReady
                             ? Color.green
-                            : FluidOnboardingLandingColors.blue
+                            : FreeFlowOnboardingColors.accent
                     )
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -1449,11 +1445,11 @@ struct OnboardingFlowView: View {
             if !self.isVoiceModelReady {
                 if let progress = self.asr.downloadProgress, self.asr.isDownloadingModel {
                     ProgressView(value: progress)
-                        .tint(FluidOnboardingLandingColors.blue)
+                        .tint(FreeFlowOnboardingColors.accent)
                 } else {
                     ProgressView()
                         .progressViewStyle(.linear)
-                        .tint(FluidOnboardingLandingColors.blue)
+                        .tint(FreeFlowOnboardingColors.accent)
                 }
             }
 
@@ -1519,15 +1515,15 @@ struct OnboardingFlowView: View {
     private var permissionsStep: some View {
         GeometryReader { proxy in
             ZStack {
-                FluidOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
+                FreeFlowOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
 
                 VStack(spacing: 0) {
-                    FluidOnboardingCompactProgress(value: self.compactProgressValue)
+                    FreeFlowOnboardingCompactProgress(value: self.compactProgressValue)
                         .padding(.top, 28)
 
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(spacing: 0) {
-                            FluidOnboardingCompactAppIconMark(size: 66)
+                            FreeFlowOnboardingCompactAppIconMark(size: 66)
                                 .padding(.bottom, 22)
 
                             Text("Let FreeFlow\nlisten and type")
@@ -1601,7 +1597,7 @@ struct OnboardingFlowView: View {
                     }
                 }
 
-                FluidOnboardingLandingHoverTracker(
+                FreeFlowOnboardingLandingHoverTracker(
                     onMove: { location, size in
                         self.updateLandingGlow(location: location, in: size)
                     },
@@ -1615,66 +1611,183 @@ struct OnboardingFlowView: View {
         }
     }
 
-    private var aiEnhancementStep: some View {
-        OnboardingAIEnhancementStepView(
-            finalText: Binding(
-                get: { self.asr.finalText },
-                set: { self.asr.finalText = $0 }
-            ),
-            progressValue: self.compactProgressValue,
-            glowCenter: self.landingGlowCenter,
-            language: self.selectedOnboardingLanguage,
-            shortcutDisplay: self.onboardingShortcutDisplay,
-            isTestReady: self.isPlaygroundReady,
-            isRunning: self.asr.isRunning,
-            isRecordingShortcut: self.isRecordingPrimaryShortcut,
-            shortcutRecordingMessage: self.isRecordingPrimaryShortcut ? self.shortcutRecordingMessage : nil,
-            onGlowMove: self.updateLandingGlow(location:in:),
-            onGlowExit: self.resetLandingGlow,
-            onBack: self.goBack,
-            onSkip: {
-                let origin = self.settings.analyticsOnboardingOrigin
-                self.markAISkipped()
-                self.finishOnboardingAtGettingStarted()
-                self.completeCurrentStep(
-                    outcome: .skipped,
-                    origin: origin,
-                    completesFlow: self.settings.onboardingCompleted
-                )
-            },
-            onUseAIProvider: {
-                let origin = self.settings.analyticsOnboardingOrigin
-                self.openAIEnhancementSettingsFromOnboarding()
-                self.completeCurrentStep(
-                    outcome: .openedSettings,
-                    origin: origin,
-                    completesFlow: self.settings.onboardingCompleted
-                )
-            },
-            onFinishSetup: {
-                let origin = self.settings.analyticsOnboardingOrigin
-                self.finishOnboardingAtGettingStarted()
-                self.completeCurrentStep(
-                    outcome: .completed,
-                    origin: origin,
-                    completesFlow: self.settings.onboardingCompleted
-                )
-            }
-        )
-    }
-
-    private var playgroundStep: some View {
+    /// Closing step: what FreeFlow costs, and why that is unusual.
+    ///
+    /// Every comparative claim here is verifiable. Wispr Flow Pro is $15/month
+    /// from their own pricing page, and their transcription runs in the cloud —
+    /// their privacy controls govern retention and training, not where audio is
+    /// processed. Saying anything stronger would be both untrue and actionable.
+    private var pricingStep: some View {
         GeometryReader { proxy in
             ZStack {
-                FluidOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
+                FreeFlowOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
 
                 VStack(spacing: 0) {
-                    FluidOnboardingCompactProgress(value: self.compactProgressValue)
+                    FreeFlowOnboardingCompactProgress(value: self.compactProgressValue)
                         .padding(.top, 28)
 
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(spacing: 0) {
-                            FluidOnboardingCompactAppIconMark(size: 66)
+                            FreeFlowOnboardingCompactAppIconMark(size: 66)
+                                .padding(.bottom, 22)
+
+                            Text("Five free.\nThen five dollars.")
+                                .font(.system(size: 28, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .multilineTextAlignment(.center)
+                                .lineSpacing(4)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.bottom, 14)
+
+                            Text("Once. Not every month.")
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundStyle(Color.white.opacity(0.62))
+                                .padding(.bottom, 24)
+
+                            self.priceComparison
+                                .frame(width: 560)
+
+                            Text("Every update included. No account needed to try it.")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundStyle(Color.white.opacity(0.44))
+                                .padding(.top, 18)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 30)
+                        .padding(.bottom, 12)
+                    }
+
+                    self.cinematicFooter(
+                        continueTitle: "Start Dictating",
+                        canContinue: true
+                    ) {
+                        self.handlePrimaryAction()
+                    }
+                }
+
+                FreeFlowOnboardingLandingHoverTracker(
+                    onMove: { location, size in
+                        self.updateLandingGlow(location: location, in: size)
+                    },
+                    onExit: {
+                        self.resetLandingGlow()
+                    }
+                )
+                .frame(width: proxy.size.width, height: proxy.size.height)
+                .accessibilityHidden(true)
+            }
+        }
+    }
+
+    private var priceComparison: some View {
+        HStack(alignment: .top, spacing: 14) {
+            self.priceCard(
+                name: Brand.appName,
+                price: "$5",
+                cadence: "once, forever",
+                points: [
+                    (true, "Runs on your Mac"),
+                    (true, "Audio never leaves your device"),
+                    (true, "Works with no internet"),
+                    (true, "Every future update included"),
+                ],
+                isHero: true
+            )
+
+            self.priceCard(
+                name: "Wispr Flow",
+                price: "$15",
+                cadence: "every month",
+                points: [
+                    (false, "Transcribes in the cloud"),
+                    (false, "Your audio leaves your Mac"),
+                    (false, "Needs a connection to work"),
+                    (false, "$180 a year, every year"),
+                ],
+                isHero: false
+            )
+        }
+    }
+
+    private func priceCard(
+        name: String,
+        price: String,
+        cadence: String,
+        points: [(Bool, String)],
+        isHero: Bool
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text(name)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(isHero ? .white : Color.white.opacity(0.62))
+
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(price)
+                    .font(.system(size: 34, weight: .bold))
+                    .foregroundStyle(
+                        isHero
+                            ? FreeFlowOnboardingColors.accentBright
+                            : FreeFlowOnboardingColors.caution
+                    )
+
+                Text(cadence)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.white.opacity(isHero ? 0.62 : 0.46))
+            }
+
+            VStack(alignment: .leading, spacing: 9) {
+                ForEach(points, id: \.1) { point in
+                    HStack(alignment: .top, spacing: 8) {
+                        Image(systemName: point.0 ? "checkmark" : "xmark")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(
+                                point.0
+                                    ? FreeFlowOnboardingColors.positive
+                                    : FreeFlowOnboardingColors.caution
+                            )
+                            .frame(width: 12, alignment: .center)
+                            .padding(.top, 3)
+
+                        Text(point.1)
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(Color.white.opacity(isHero ? 0.86 : 0.54))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
+
+            Spacer(minLength: 0)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(18)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color.white.opacity(isHero ? 0.06 : 0.025))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .stroke(
+                            isHero
+                                ? FreeFlowOnboardingColors.accent.opacity(0.42)
+                                : Color.white.opacity(0.07),
+                            lineWidth: 1
+                        )
+                )
+        )
+    }
+
+
+    private var playgroundStep: some View {
+        GeometryReader { proxy in
+            ZStack {
+                FreeFlowOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
+
+                VStack(spacing: 0) {
+                    FreeFlowOnboardingCompactProgress(value: self.compactProgressValue)
+                        .padding(.top, 28)
+
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(spacing: 0) {
+                            FreeFlowOnboardingCompactAppIconMark(size: 66)
                                 .padding(.bottom, 22)
 
                             Text("FreeFlow is ready.")
@@ -1728,7 +1841,7 @@ struct OnboardingFlowView: View {
                 }
                 .frame(width: proxy.size.width, height: proxy.size.height)
 
-                FluidOnboardingLandingHoverTracker(
+                FreeFlowOnboardingLandingHoverTracker(
                     onMove: { location, size in
                         self.updateLandingGlow(location: location, in: size)
                     },
@@ -2064,7 +2177,7 @@ struct OnboardingFlowView: View {
                 .overlay(
                     shape.stroke(
                         isSelected
-                            ? FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.92 : 0.78)
+                            ? FreeFlowOnboardingColors.accent.opacity(isHovered ? 0.92 : 0.78)
                             : (isHovered ? Color.white.opacity(0.20) : Color.white.opacity(0.10)),
                         lineWidth: isSelected ? 1.4 : 1
                     )
@@ -2122,7 +2235,7 @@ struct OnboardingFlowView: View {
                       let progress = self.asr.downloadProgress
             {
                 ProgressView(value: progress)
-                    .tint(FluidOnboardingLandingColors.blue)
+                    .tint(FreeFlowOnboardingColors.accent)
 
                 HStack(spacing: 6) {
                     Text(self.asr.modelPreparationStatusText)
@@ -2266,7 +2379,7 @@ struct OnboardingFlowView: View {
         onHover: @escaping (Bool) -> Void
     ) -> some View {
         let shape = Capsule()
-        let accentColor: Color = configuration.tone == .destructive ? .red : FluidOnboardingLandingColors.blue
+        let accentColor: Color = configuration.tone == .destructive ? .red : FreeFlowOnboardingColors.accent
         let isFilledTone = configuration.tone == .primary || configuration.tone == .destructive
         let fillColor: Color = {
             switch configuration.tone {
@@ -2281,7 +2394,7 @@ struct OnboardingFlowView: View {
             case .primary, .destructive:
                 return Color.white.opacity(configuration.isHovered && configuration.isEnabled ? 0.30 : 0)
             case .secondary:
-                return configuration.isHovered && configuration.isEnabled ? FluidOnboardingLandingColors.blue.opacity(0.30) : Color.white.opacity(0.07)
+                return configuration.isHovered && configuration.isEnabled ? FreeFlowOnboardingColors.accent.opacity(0.30) : Color.white.opacity(0.07)
             }
         }()
         let foregroundOpacity: Double = configuration.isEnabled ? (isFilledTone ? 1.0 : (configuration.isHovered ? 0.94 : 0.78)) : 0.42
@@ -2382,7 +2495,7 @@ struct OnboardingFlowView: View {
         return HStack(spacing: 14) {
             ZStack {
                 Circle()
-                    .fill(isReady ? Color.green.opacity(0.16) : FluidOnboardingLandingColors.blue.opacity(0.12))
+                    .fill(isReady ? Color.green.opacity(0.16) : FreeFlowOnboardingColors.accent.opacity(0.12))
                     .frame(width: 46, height: 46)
 
                 if isReady {
@@ -2397,7 +2510,7 @@ struct OnboardingFlowView: View {
                         Text("\(stepNumber)")
                             .font(.system(size: 10, weight: .bold))
                     }
-                    .foregroundStyle(FluidOnboardingLandingColors.blue)
+                    .foregroundStyle(FreeFlowOnboardingColors.accent)
                 }
             }
 
@@ -2409,12 +2522,12 @@ struct OnboardingFlowView: View {
 
                     Text(resolvedStatusTitle)
                         .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(isReady ? Color.green.opacity(0.92) : FluidOnboardingLandingColors.blue)
+                        .foregroundStyle(isReady ? Color.green.opacity(0.92) : FreeFlowOnboardingColors.accent)
                         .padding(.horizontal, 7)
                         .padding(.vertical, 3)
                         .background(
                             Capsule()
-                                .fill((isReady ? Color.green : FluidOnboardingLandingColors.blue).opacity(0.12))
+                                .fill((isReady ? Color.green : FreeFlowOnboardingColors.accent).opacity(0.12))
                         )
                 }
 
@@ -2455,7 +2568,7 @@ struct OnboardingFlowView: View {
                 .fill(Color.white.opacity(isReady ? 0.045 : 0.070))
                 .overlay(
                     shape.stroke(
-                        isReady ? Color.green.opacity(0.18) : FluidOnboardingLandingColors.blue.opacity(0.26),
+                        isReady ? Color.green.opacity(0.18) : FreeFlowOnboardingColors.accent.opacity(0.26),
                         lineWidth: 1
                     )
                 )
@@ -2590,8 +2703,7 @@ struct OnboardingFlowView: View {
             self.selectOnboardingRoute(route)
         }
 
-        if self.step == .aiEnhancement {
-            guard self.isAIReady else { return }
+        if self.step == .pricing {
             let origin = self.settings.analyticsOnboardingOrigin
             self.finishOnboarding()
             self.completeCurrentStep(
@@ -2876,7 +2988,7 @@ private struct OnboardingMicrophoneSetupPanel: View {
                         Capsule()
                             .fill(
                                 index < activeBarCount
-                                    ? FluidOnboardingLandingColors.blue.opacity(0.92)
+                                    ? FreeFlowOnboardingColors.accent.opacity(0.92)
                                     : Color.white.opacity(0.14)
                             )
                             .frame(width: 5, height: 15)

@@ -216,11 +216,11 @@ struct OnboardingAIEnhancementStepView: View {
     var body: some View {
         GeometryReader { proxy in
             ZStack {
-                FluidOnboardingLandingBackdrop(glowCenter: self.glowCenter)
+                FreeFlowOnboardingLandingBackdrop(glowCenter: self.glowCenter)
 
                 ScrollViewReader { scrollProxy in
                     VStack(spacing: 0) {
-                        FluidOnboardingCompactProgress(value: self.progressValue)
+                        FreeFlowOnboardingCompactProgress(value: self.progressValue)
                             .padding(.top, 28)
 
                         ScrollView(.vertical, showsIndicators: true) {
@@ -250,7 +250,7 @@ struct OnboardingAIEnhancementStepView: View {
                     }
                 }
 
-                FluidOnboardingLandingHoverTracker(
+                FreeFlowOnboardingLandingHoverTracker(
                     onMove: self.onGlowMove,
                     onExit: self.onGlowExit
                 )
@@ -277,7 +277,7 @@ struct OnboardingAIEnhancementStepView: View {
     private func setupSection(scrollProxy: ScrollViewProxy, containerWidth: CGFloat) -> some View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
-                FluidOnboardingCompactAppIconMark(size: 52)
+                FreeFlowOnboardingCompactAppIconMark(size: 52)
                     .padding(.bottom, 18)
 
                 Text("One more thing...")
@@ -342,7 +342,7 @@ struct OnboardingAIEnhancementStepView: View {
     private func playgroundSection(containerWidth: CGFloat) -> some View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
-                FluidOnboardingCompactAppIconMark(size: 52)
+                FreeFlowOnboardingCompactAppIconMark(size: 52)
                     .padding(.bottom, 18)
 
                 VStack(spacing: 8) {
@@ -395,7 +395,7 @@ struct OnboardingAIEnhancementStepView: View {
 
             Text(rightTitle)
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(FluidOnboardingLandingColors.blue.opacity(0.84))
+                .foregroundStyle(FreeFlowOnboardingColors.accent.opacity(0.84))
                 .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(.leading, ExampleGridMetrics.headerLeadingInset)
@@ -416,14 +416,14 @@ struct OnboardingAIEnhancementStepView: View {
             HStack(spacing: ExampleGridMetrics.columnSpacing) {
                 Image(systemName: "mic.fill")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(FluidOnboardingLandingColors.blue)
+                    .foregroundStyle(FreeFlowOnboardingColors.accent)
                     .frame(width: ExampleGridMetrics.iconSize, height: ExampleGridMetrics.iconSize)
                     .background(
                         Circle()
-                            .fill(FluidOnboardingLandingColors.blue.opacity(0.12))
+                            .fill(FreeFlowOnboardingColors.accent.opacity(0.12))
                             .overlay(
                                 Circle()
-                                    .stroke(FluidOnboardingLandingColors.blue.opacity(0.22), lineWidth: 1)
+                                    .stroke(FreeFlowOnboardingColors.accent.opacity(0.22), lineWidth: 1)
                             )
                     )
 
@@ -515,9 +515,9 @@ struct OnboardingAIEnhancementStepView: View {
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .background(
             shape
-                .fill(FluidOnboardingLandingColors.blue.opacity(0.060))
+                .fill(FreeFlowOnboardingColors.accent.opacity(0.060))
                 .overlay(
-                    shape.stroke(FluidOnboardingLandingColors.blue.opacity(0.42), lineWidth: 1.2)
+                    shape.stroke(FreeFlowOnboardingColors.accent.opacity(0.42), lineWidth: 1.2)
                 )
         )
     }
@@ -542,14 +542,14 @@ struct OnboardingAIEnhancementStepView: View {
                 HStack(spacing: ExampleGridMetrics.columnSpacing) {
                     Image(systemName: isSelected ? "mic.circle.fill" : "mic.fill")
                         .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(FluidOnboardingLandingColors.blue)
+                        .foregroundStyle(FreeFlowOnboardingColors.accent)
                         .frame(width: ExampleGridMetrics.iconSize, height: ExampleGridMetrics.iconSize)
                         .background(
                             Circle()
-                                .fill(FluidOnboardingLandingColors.blue.opacity(isSelected ? 0.22 : 0.12))
+                                .fill(FreeFlowOnboardingColors.accent.opacity(isSelected ? 0.22 : 0.12))
                                 .overlay(
                                     Circle()
-                                        .stroke(FluidOnboardingLandingColors.blue.opacity(isSelected ? 0.48 : 0.22), lineWidth: 1)
+                                        .stroke(FreeFlowOnboardingColors.accent.opacity(isSelected ? 0.48 : 0.22), lineWidth: 1)
                                 )
                         )
 
@@ -576,9 +576,9 @@ struct OnboardingAIEnhancementStepView: View {
                         .fill(Color.white.opacity(isSelected ? 0.054 : 0.038))
                         .overlay(
                             rawShape
-                                .stroke(isSelected ? FluidOnboardingLandingColors.blue.opacity(0.48) : Color.white.opacity(0.070), lineWidth: isSelected ? 1.2 : 1)
+                                .stroke(isSelected ? FreeFlowOnboardingColors.accent.opacity(0.48) : Color.white.opacity(0.070), lineWidth: isSelected ? 1.2 : 1)
                         )
-                        .shadow(color: FluidOnboardingLandingColors.blue.opacity(allowsDecorativeShadow && isSelected ? 0.13 : 0), radius: rawShadowRadius, x: 0, y: 4)
+                        .shadow(color: FreeFlowOnboardingColors.accent.opacity(allowsDecorativeShadow && isSelected ? 0.13 : 0), radius: rawShadowRadius, x: 0, y: 4)
                 )
                 .contentShape(rawShape)
             }
@@ -599,12 +599,12 @@ struct OnboardingAIEnhancementStepView: View {
                 .frame(width: ExampleGridMetrics.arrowSize, height: ExampleGridMetrics.arrowSize)
                 .background(
                     Circle()
-                        .fill(isListening ? FluidOnboardingLandingColors.blue.opacity(0.22) : Color.white.opacity(isSelected ? 0.10 : 0.065))
+                        .fill(isListening ? FreeFlowOnboardingColors.accent.opacity(0.22) : Color.white.opacity(isSelected ? 0.10 : 0.065))
                         .overlay(
                             Circle()
-                                .stroke(isSelected ? FluidOnboardingLandingColors.blue.opacity(0.28) : Color.white.opacity(0.10), lineWidth: 1)
+                                .stroke(isSelected ? FreeFlowOnboardingColors.accent.opacity(0.28) : Color.white.opacity(0.10), lineWidth: 1)
                         )
-                        .shadow(color: FluidOnboardingLandingColors.blue.opacity(allowsDecorativeShadow && isListening ? 0.30 : 0), radius: arrowShadowRadius, x: 0, y: 0)
+                        .shadow(color: FreeFlowOnboardingColors.accent.opacity(allowsDecorativeShadow && isListening ? 0.30 : 0), radius: arrowShadowRadius, x: 0, y: 0)
                 )
                 .matchedGeometryEffect(
                     id: "example-arrow-\(example.id)",
@@ -627,7 +627,7 @@ struct OnboardingAIEnhancementStepView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "waveform")
                             .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(FluidOnboardingLandingColors.blue)
+                            .foregroundStyle(FreeFlowOnboardingColors.accent)
 
                         Text("Listening...")
                             .font(.system(size: 12, weight: .semibold))
@@ -674,12 +674,12 @@ struct OnboardingAIEnhancementStepView: View {
             .frame(maxWidth: .infinity, alignment: .topLeading)
             .background(
                 outputShape
-                    .fill(FluidOnboardingLandingColors.blue.opacity(isListening ? 0.105 : (isSelected ? 0.072 : 0.040)))
+                    .fill(FreeFlowOnboardingColors.accent.opacity(isListening ? 0.105 : (isSelected ? 0.072 : 0.040)))
                     .overlay(
                         outputShape
-                            .stroke(FluidOnboardingLandingColors.blue.opacity(isListening ? 0.72 : (isSelected ? 0.54 : 0.22)), lineWidth: isSelected ? 1.3 : 1)
+                            .stroke(FreeFlowOnboardingColors.accent.opacity(isListening ? 0.72 : (isSelected ? 0.54 : 0.22)), lineWidth: isSelected ? 1.3 : 1)
                     )
-                    .shadow(color: FluidOnboardingLandingColors.blue.opacity(outputShadowOpacity), radius: outputShadowRadius, x: 0, y: 5)
+                    .shadow(color: FreeFlowOnboardingColors.accent.opacity(outputShadowOpacity), radius: outputShadowRadius, x: 0, y: 5)
             )
             .contentShape(outputShape)
             .onTapGesture {
@@ -755,8 +755,8 @@ struct OnboardingAIEnhancementStepView: View {
         .background(
             shape
                 .fill(Color.white.opacity(isHovered ? 0.070 : 0.052))
-                .overlay(shape.stroke(FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.42 : 0.26), lineWidth: 1))
-                .shadow(color: FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.18 : 0.08), radius: isHovered ? 18 : 10, x: 0, y: 5)
+                .overlay(shape.stroke(FreeFlowOnboardingColors.accent.opacity(isHovered ? 0.42 : 0.26), lineWidth: 1))
+                .shadow(color: FreeFlowOnboardingColors.accent.opacity(isHovered ? 0.18 : 0.08), radius: isHovered ? 18 : 10, x: 0, y: 5)
         )
         .onHover { isHovered in
             self.setHoveredButton(isHovered ? "generic-ai-provider" : nil)
@@ -851,8 +851,8 @@ struct OnboardingAIEnhancementStepView: View {
         .background(
             shape
                 .fill(Color.white.opacity(isHovered ? 0.070 : 0.052))
-                .overlay(shape.stroke(FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.42 : 0.26), lineWidth: 1))
-                .shadow(color: FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.18 : 0.08), radius: isHovered ? 18 : 10, x: 0, y: 5)
+                .overlay(shape.stroke(FreeFlowOnboardingColors.accent.opacity(isHovered ? 0.42 : 0.26), lineWidth: 1))
+                .shadow(color: FreeFlowOnboardingColors.accent.opacity(isHovered ? 0.18 : 0.08), radius: isHovered ? 18 : 10, x: 0, y: 5)
         )
         .onHover { isHovered in
             self.setHoveredButton(isHovered ? "private-ai-provider" : nil)
@@ -882,13 +882,13 @@ struct OnboardingAIEnhancementStepView: View {
             if let fraction = self.privateAISetupProgress?.fractionCompleted {
                 ProgressView(value: fraction)
                     .progressViewStyle(.linear)
-                    .tint(FluidOnboardingLandingColors.blue)
+                    .tint(FreeFlowOnboardingColors.accent)
                     .frame(height: 4)
             } else {
                 ProgressView()
                     .progressViewStyle(.linear)
                     .controlSize(.small)
-                    .tint(FluidOnboardingLandingColors.blue)
+                    .tint(FreeFlowOnboardingColors.accent)
                     .frame(height: 4)
             }
         }
@@ -918,7 +918,7 @@ struct OnboardingAIEnhancementStepView: View {
         HStack(spacing: 6) {
             Image(systemName: systemImage)
                 .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(FluidOnboardingLandingColors.blue.opacity(0.86))
+                .foregroundStyle(FreeFlowOnboardingColors.accent.opacity(0.86))
 
             Text(text)
                 .font(.system(size: 12, weight: .medium))
@@ -1052,7 +1052,7 @@ struct OnboardingAIEnhancementStepView: View {
         let isDisabled = !configuration.isEnabled
         let isHovered = self.hoveredButtonID == configuration.id && !isDisabled
         let shape = Capsule()
-        let accentColor = configuration.tone == .destructive ? Color.red : FluidOnboardingLandingColors.blue
+        let accentColor = configuration.tone == .destructive ? Color.red : FreeFlowOnboardingColors.accent
         let isPrimary = configuration.tone == .primary
         let isDestructive = configuration.tone == .destructive
         let fillColor: Color = {

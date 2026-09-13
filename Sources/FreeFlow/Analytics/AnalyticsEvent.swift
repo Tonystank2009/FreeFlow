@@ -56,6 +56,7 @@ enum AnalyticsOnboardingStep: String {
     case permissions
     case playground
     case aiEnhancement = "ai_enhancement"
+    case pricing
 }
 
 enum AnalyticsOnboardingOrigin: String {

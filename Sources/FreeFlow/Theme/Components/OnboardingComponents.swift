@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 
-struct FluidOnboardingLandingHero<Actions: View>: View {
+struct FreeFlowOnboardingLandingHero<Actions: View>: View {
     @Environment(\.theme) private var theme
 
     let eyebrow: String
@@ -29,14 +29,14 @@ struct FluidOnboardingLandingHero<Actions: View>: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            FluidOnboardingAppIconMark()
+            FreeFlowOnboardingAppIconMark()
                 .padding(.bottom, self.eyebrow.isEmpty ? 40 : 26)
 
             if !self.eyebrow.isEmpty {
                 Text(self.eyebrow)
                     .font(.system(size: 14, weight: .bold))
                     .tracking(4.2)
-                    .foregroundStyle(FluidOnboardingLandingColors.blue.opacity(0.72))
+                    .foregroundStyle(FreeFlowOnboardingColors.accent.opacity(0.72))
                     .textCase(.uppercase)
                     .padding(.bottom, 16)
             }
@@ -51,7 +51,7 @@ struct FluidOnboardingLandingHero<Actions: View>: View {
                 Text(self.accentTitle)
                     .font(.system(size: 50, weight: .semibold))
                     .italic()
-                    .foregroundStyle(FluidOnboardingLandingColors.blue)
+                    .foregroundStyle(FreeFlowOnboardingColors.accent)
                     .multilineTextAlignment(.center)
                     .minimumScaleFactor(0.76)
             }
@@ -77,7 +77,7 @@ struct FluidOnboardingLandingHero<Actions: View>: View {
     }
 }
 
-struct FluidOnboardingLandingBackdrop: View {
+struct FreeFlowOnboardingLandingBackdrop: View {
     let glowCenter: UnitPoint
 
     init(glowCenter: UnitPoint = UnitPoint(x: 0.5, y: 0.18)) {
@@ -86,12 +86,12 @@ struct FluidOnboardingLandingBackdrop: View {
 
     var body: some View {
         ZStack {
-            Color(red: 0.012, green: 0.019, blue: 0.031)
+            Color(red: 0.024, green: 0.018, blue: 0.043)
 
             RadialGradient(
                 colors: [
-                    FluidOnboardingLandingColors.blue.opacity(0.18),
-                    Color(red: 0.014, green: 0.032, blue: 0.068).opacity(0.30),
+                    FreeFlowOnboardingColors.accent.opacity(0.18),
+                    FreeFlowOnboardingColors.accentDeep.opacity(0.26),
                     .clear,
                 ],
                 center: self.glowCenter,
@@ -113,7 +113,7 @@ struct FluidOnboardingLandingBackdrop: View {
     }
 }
 
-struct FluidOnboardingCompactProgress: View {
+struct FreeFlowOnboardingCompactProgress: View {
     let value: Double
 
     var body: some View {
@@ -126,9 +126,9 @@ struct FluidOnboardingCompactProgress: View {
                     .fill(Color.white.opacity(0.08))
 
                 Capsule()
-                    .fill(FluidOnboardingLandingColors.blue)
+                    .fill(FreeFlowOnboardingColors.accent)
                     .frame(width: width * clampedValue)
-                    .shadow(color: FluidOnboardingLandingColors.blue.opacity(0.38), radius: 8, x: 0, y: 0)
+                    .shadow(color: FreeFlowOnboardingColors.accent.opacity(0.38), radius: 8, x: 0, y: 0)
             }
         }
         .frame(width: 292, height: 4)
@@ -136,7 +136,7 @@ struct FluidOnboardingCompactProgress: View {
     }
 }
 
-struct FluidOnboardingCompactAppIconMark: View {
+struct FreeFlowOnboardingCompactAppIconMark: View {
     private static let appIconImage: NSImage = NSApplication.shared.applicationIconImage
         ?? NSWorkspace.shared.icon(forFile: Bundle.main.bundlePath)
 
@@ -152,13 +152,13 @@ struct FluidOnboardingCompactAppIconMark: View {
             .interpolation(.high)
             .aspectRatio(contentMode: .fit)
             .frame(width: self.size, height: self.size)
-            .shadow(color: FluidOnboardingLandingColors.blue.opacity(0.45), radius: 24, x: 0, y: 0)
+            .shadow(color: FreeFlowOnboardingColors.accent.opacity(0.45), radius: 24, x: 0, y: 0)
             .shadow(color: Color.black.opacity(0.42), radius: 14, x: 0, y: 9)
             .accessibilityHidden(true)
     }
 }
 
-struct FluidOnboardingLandingHoverTracker: NSViewRepresentable {
+struct FreeFlowOnboardingLandingHoverTracker: NSViewRepresentable {
     let onMove: (CGPoint, CGSize) -> Void
     let onExit: () -> Void
 
@@ -235,7 +235,7 @@ struct FluidOnboardingLandingHoverTracker: NSViewRepresentable {
     }
 }
 
-struct FluidOnboardingLandingPrimaryButton: NSViewRepresentable {
+struct FreeFlowOnboardingLandingPrimaryButton: NSViewRepresentable {
     static let size = CGSize(width: 236, height: 56)
 
     let title: String
@@ -300,7 +300,7 @@ private final class LandingPrimaryNSButton: NSButton {
     }
 
     override var intrinsicContentSize: NSSize {
-        FluidOnboardingLandingPrimaryButton.size
+        FreeFlowOnboardingLandingPrimaryButton.size
     }
 
     override func hitTest(_ point: NSPoint) -> NSView? {
@@ -369,19 +369,19 @@ private final class LandingPrimaryNSButton: NSButton {
     }
 }
 
-private struct FluidOnboardingAppIconMark: View {
+private struct FreeFlowOnboardingAppIconMark: View {
     private static let appIconImage: NSImage = NSApplication.shared.applicationIconImage
         ?? NSWorkspace.shared.icon(forFile: Bundle.main.bundlePath)
 
     var body: some View {
         ZStack {
             Circle()
-                .fill(FluidOnboardingLandingColors.blue.opacity(0.28))
+                .fill(FreeFlowOnboardingColors.accent.opacity(0.28))
                 .blur(radius: 42)
                 .frame(width: 188, height: 188)
                 .offset(y: -16)
 
-            FluidOnboardingPortalGlow()
+            FreeFlowOnboardingPortalGlow()
                 .offset(y: 58)
 
             Image(nsImage: Self.appIconImage)
@@ -390,14 +390,14 @@ private struct FluidOnboardingAppIconMark: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 116, height: 116)
                 .shadow(color: Color.black.opacity(0.56), radius: 20, x: 0, y: 15)
-                .shadow(color: FluidOnboardingLandingColors.blue.opacity(0.58), radius: 36, x: 0, y: 0)
+                .shadow(color: FreeFlowOnboardingColors.accent.opacity(0.58), radius: 36, x: 0, y: 0)
         }
         .frame(width: 360, height: 176)
         .accessibilityHidden(true)
     }
 }
 
-private struct FluidOnboardingPortalGlow: View {
+private struct FreeFlowOnboardingPortalGlow: View {
     var body: some View {
         ZStack {
             Ellipse()
@@ -405,8 +405,8 @@ private struct FluidOnboardingPortalGlow: View {
                     RadialGradient(
                         colors: [
                             Color.white.opacity(0.74),
-                            FluidOnboardingLandingColors.blue.opacity(0.64),
-                            FluidOnboardingLandingColors.blue.opacity(0.05),
+                            FreeFlowOnboardingColors.accent.opacity(0.64),
+                            FreeFlowOnboardingColors.accent.opacity(0.05),
                             .clear,
                         ],
                         center: .center,
@@ -418,19 +418,31 @@ private struct FluidOnboardingPortalGlow: View {
                 .frame(width: 230, height: 25)
 
             Ellipse()
-                .stroke(FluidOnboardingLandingColors.blue.opacity(0.42), lineWidth: 3)
+                .stroke(FreeFlowOnboardingColors.accent.opacity(0.42), lineWidth: 3)
                 .blur(radius: 1.4)
                 .frame(width: 326, height: 35)
 
             Ellipse()
-                .stroke(FluidOnboardingLandingColors.blue.opacity(0.24), lineWidth: 1.4)
+                .stroke(FreeFlowOnboardingColors.accent.opacity(0.24), lineWidth: 1.4)
                 .frame(width: 260, height: 22)
         }
     }
 }
 
-enum FluidOnboardingLandingColors {
-    static let blue = Color(red: 0.10, green: 0.46, blue: 1.0)
+/// FreeFlow's onboarding palette.
+///
+/// One accent, matched to the app icon, used sparingly against near-monochrome
+/// surfaces. Restraint is the point: a second competing colour makes a screen
+/// look assembled rather than designed.
+enum FreeFlowOnboardingColors {
+    /// The single accent. Everything interactive and nothing else.
+    static let accent = Color(red: 0.42, green: 0.24, blue: 0.94)
+    static let accentBright = Color(red: 0.60, green: 0.38, blue: 1.0)
+    static let accentDeep = Color(red: 0.29, green: 0.16, blue: 0.64)
+
+    /// Reserved for cost. Used once, so it still means something.
+    static let caution = Color(red: 1.00, green: 0.45, blue: 0.33)
+    static let positive = Color(red: 0.24, green: 0.82, blue: 0.53)
 }
 
 private struct OnboardingSelectableSurfaceModifier: ViewModifier {

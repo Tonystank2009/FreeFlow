@@ -48,7 +48,7 @@ enum Brand {
         /// no account required, and nothing to configure. Flip to `true` to
         /// turn on the trial-then-pay flow — the whole implementation is intact
         /// behind this flag.
-        static let isPaywallEnabled = false
+        static let isPaywallEnabled = true
 
         /// Dictations a user gets before the unlock prompt becomes mandatory.
         /// Ignored entirely while `isPaywallEnabled` is false.

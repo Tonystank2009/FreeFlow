@@ -196,7 +196,7 @@ struct OnboardingTryoutStepView: View {
                 .overlay(shape.stroke(Color.white.opacity(0.11), lineWidth: 1))
                 .overlay(
                     shape.stroke(
-                        FluidOnboardingLandingColors.blue.opacity(self.isShortcutGlowActive ? 0.30 : 0.12),
+                        FreeFlowOnboardingColors.accent.opacity(self.isShortcutGlowActive ? 0.30 : 0.12),
                         lineWidth: self.isShortcutGlowActive ? 1.3 : 1
                     )
                 )
@@ -225,13 +225,13 @@ struct OnboardingTryoutStepView: View {
                 .background(
                     shape
                         .fill(Color.white.opacity(fillOpacity))
-                        .overlay(shape.stroke(self.isChangeHovered && isEnabled ? FluidOnboardingLandingColors.blue.opacity(0.30) : Color.white.opacity(0.07), lineWidth: 1))
+                        .overlay(shape.stroke(self.isChangeHovered && isEnabled ? FreeFlowOnboardingColors.accent.opacity(0.30) : Color.white.opacity(0.07), lineWidth: 1))
                         .overlay(
                             shape
-                                .stroke(FluidOnboardingLandingColors.blue.opacity(ringOpacity), lineWidth: self.isChangeHovered && isEnabled ? 1.4 : 1)
+                                .stroke(FreeFlowOnboardingColors.accent.opacity(ringOpacity), lineWidth: self.isChangeHovered && isEnabled ? 1.4 : 1)
                                 .padding(-2)
                         )
-                        .shadow(color: FluidOnboardingLandingColors.blue.opacity(self.isChangeHovered && isEnabled ? 0.08 : 0), radius: 16, x: 0, y: 6)
+                        .shadow(color: FreeFlowOnboardingColors.accent.opacity(self.isChangeHovered && isEnabled ? 0.08 : 0), radius: 16, x: 0, y: 6)
                 )
                 .contentShape(shape)
         }
@@ -291,7 +291,7 @@ struct OnboardingTryoutStepView: View {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                                     .stroke(
-                                        self.isRunning ? FluidOnboardingLandingColors.blue.opacity(0.46) : Color.white.opacity(0.08),
+                                        self.isRunning ? FreeFlowOnboardingColors.accent.opacity(0.46) : Color.white.opacity(0.08),
                                         lineWidth: self.isRunning ? 1.4 : 1
                                     )
                             )
@@ -350,12 +350,12 @@ struct OnboardingTryoutStepView: View {
                     .fill(Color.white.opacity(isListening ? 0.115 : 0.075))
                     .overlay(
                         shape.stroke(
-                            FluidOnboardingLandingColors.blue.opacity(isListening ? 0.86 : 0.48),
+                            FreeFlowOnboardingColors.accent.opacity(isListening ? 0.86 : 0.48),
                             lineWidth: isListening ? 1.6 : 1.2
                         )
                     )
                     .shadow(
-                        color: FluidOnboardingLandingColors.blue.opacity(isListening ? 0.34 : 0.20),
+                        color: FreeFlowOnboardingColors.accent.opacity(isListening ? 0.34 : 0.20),
                         radius: isListening ? 18 : 12,
                         x: 0,
                         y: isPressed ? 2 : 0
@@ -377,10 +377,10 @@ struct OnboardingTryoutStepView: View {
             .padding(.vertical, 7)
             .background(
                 RoundedRectangle(cornerRadius: 9, style: .continuous)
-                    .fill(FluidOnboardingLandingColors.blue.opacity(0.08))
+                    .fill(FreeFlowOnboardingColors.accent.opacity(0.08))
                     .overlay(
                         RoundedRectangle(cornerRadius: 9, style: .continuous)
-                            .stroke(FluidOnboardingLandingColors.blue.opacity(0.16), lineWidth: 1)
+                            .stroke(FreeFlowOnboardingColors.accent.opacity(0.16), lineWidth: 1)
                     )
             )
     }
