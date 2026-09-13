@@ -1517,7 +1517,14 @@ final class ASRService: ObservableObject {
                 Task { @MainActor in
                     self.isRequestingMicrophoneAccess = false
                     self.micPermissionGranted = granted
-                    self.micStatus = granted ? .authorized : .denied
+
+                    // Re-read the real status rather than inferring .denied from
+                    // the callback flag. A request can come back false while the
+                    // system is still .notDetermined — a dismissed prompt, or a
+                    // runtime-level block. Recording .denied in that case flipped
+                    // the button to "Open Settings" and sent users to a pane the
+                    // app was not listed in, with no way to grant access.
+                    self.micStatus = AVCaptureDevice.authorizationStatus(for: .audio)
                     if granted {
                         await self.prewarmConfiguredAudioCaptureIfPossible(reason: "permission_granted")
                     }
