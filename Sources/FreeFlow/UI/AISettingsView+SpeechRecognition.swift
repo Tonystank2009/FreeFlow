@@ -181,8 +181,8 @@ extension VoiceEngineSettingsView {
                                     .fontWeight(.semibold)
                                     .padding(.horizontal, 6)
                                     .padding(.vertical, 2)
-                                    .background(Capsule().fill(badge == "FreeFlow Pick" ? .cyan.opacity(0.2) : .orange.opacity(0.2)))
-                                    .foregroundStyle(badge == "FreeFlow Pick" ? .cyan : .orange)
+                                    .background(Capsule().fill(badge == "FreeFlow Pick" ? Color.appAccent.opacity(0.18) : Color.orange.opacity(0.18)))
+                                    .foregroundStyle(badge == "FreeFlow Pick" ? Color.appAccent : Color.orange)
                             }
 
                             Spacer()
@@ -260,8 +260,8 @@ extension VoiceEngineSettingsView {
 
                     LiquidBar(
                         fillPercent: model.accuracyPercent,
-                        color: Color.fluidGreen,
-                        secondaryColor: .cyan,
+                        color: Color.appAccent,
+                        secondaryColor: Color.appAccent,
                         icon: "target",
                         label: "Accuracy"
                     )
@@ -274,7 +274,7 @@ extension VoiceEngineSettingsView {
                 HStack(alignment: .center, spacing: 10) {
                     Image(systemName: "checkmark.seal.fill")
                         .font(self.theme.typography.bodySmall)
-                        .foregroundStyle(Color.fluidGreen)
+                        .foregroundStyle(Color.appAccent)
 
                     Text("Custom Words supported on Parakeet. Teach names, product terms, and uncommon words for better accuracy.")
                         .font(self.theme.typography.bodySmall)
@@ -287,17 +287,17 @@ extension VoiceEngineSettingsView {
                         NotificationCenter.default.post(name: .openCustomDictionaryFromVoiceEngine, object: nil)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(Color.fluidGreen)
+                    .tint(Color.appAccent)
                     .controlSize(.small)
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.fluidGreen.opacity(0.10))
+                        .fill(Color.appAccent.opacity(0.10))
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.fluidGreen.opacity(0.30), lineWidth: 1)
+                                .stroke(Color.appAccent.opacity(0.30), lineWidth: 1)
                         )
                 )
             }
@@ -312,11 +312,11 @@ extension VoiceEngineSettingsView {
 
         return HStack(alignment: .top, spacing: 10) {
             Circle()
-                .fill(isSelected ? Color.fluidGreen : self.theme.palette.cardBorder.opacity(0.25))
+                .fill(isSelected ? Color.appAccent : self.theme.palette.cardBorder.opacity(0.25))
                 .frame(width: 8, height: 8)
                 .overlay(
                     Circle()
-                        .stroke(isSelected ? Color.fluidGreen : self.theme.palette.cardBorder.opacity(0.5), lineWidth: 1)
+                        .stroke(isSelected ? Color.appAccent : self.theme.palette.cardBorder.opacity(0.5), lineWidth: 1)
                 )
 
             self.speechModelLogoView(for: model)
@@ -343,7 +343,7 @@ extension VoiceEngineSettingsView {
                     HStack(spacing: 4) {
                         Image(systemName: "target")
                             .font(.system(size: 11))
-                            .foregroundStyle(Color.fluidGreen)
+                            .foregroundStyle(Color.appAccent)
                         Text("Acc \(Int(model.accuracyPercent * 100))%")
                             .font(self.theme.typography.bodyStrong)
                             .foregroundStyle(self.voiceEngineSecondaryText)
@@ -445,17 +445,17 @@ extension VoiceEngineSettingsView {
                             .font(self.theme.typography.bodySmallStrong)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 4)
-                            .background(Capsule().fill(Color.fluidGreen.opacity(0.25)))
-                            .foregroundStyle(Color.fluidGreen)
+                            .background(Capsule().fill(Color.appAccent.opacity(0.25)))
+                            .foregroundStyle(Color.appAccent)
                     } else {
                         Button("Activate") {
                             self.viewModel.activateSpeechModel(model)
                         }
                         .buttonStyle(.borderedProminent)
                         .controlSize(.small)
-                        .tint(Color.fluidGreen)
+                        .tint(Color.appAccent)
                         .fontWeight(.semibold)
-                        .shadow(color: Color.fluidGreen.opacity(0.35), radius: 4, x: 0, y: 1)
+                        .shadow(color: Color.appAccent.opacity(0.35), radius: 4, x: 0, y: 1)
                         .disabled(self.viewModel.areSpeechModelActionsBlocked)
                     }
 
@@ -536,7 +536,7 @@ extension VoiceEngineSettingsView {
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(isActive ? Color.fluidGreen.opacity(0.9) : .clear, lineWidth: 2)
+                        .stroke(isActive ? Color.appAccent.opacity(0.9) : .clear, lineWidth: 2)
                 )
         )
         .onTapGesture {
@@ -767,7 +767,7 @@ extension VoiceEngineSettingsView {
                         .foregroundStyle(self.voiceEngineSecondaryText)
                 }
             } else if self.viewModel.asr.isAsrReady {
-                Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.fluidGreen).font(self.theme.typography.bodySmall)
+                Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.appAccent).font(self.theme.typography.bodySmall)
                 Text("Ready").font(self.theme.typography.bodySmall).foregroundStyle(self.voiceEngineSecondaryText)
 
                 Button(action: { Task { await self.viewModel.deleteModels() } }) {

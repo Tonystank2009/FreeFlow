@@ -1218,36 +1218,22 @@ struct ContentView: View {
     }
 
     private var appSidebarView: some View {
+        // Daily-use destinations only. Voice Engine, AI Providers and Cleanup
+        // Styles are configuration, not places anyone visits — they live under
+        // Settings > Advanced now. The engine sets itself up during onboarding,
+        // so most people never need to look at any of them.
         List(selection: self.$selectedSidebarItem) {
             Section {
-                self.sidebarNavigationLink(.voiceEngine, title: "Voice Engine", systemImage: "waveform")
-                self.sidebarNavigationLink(.aiEnhancements, title: "AI Providers", systemImage: "cpu")
-                self.sidebarNavigationLink(.cleanupStyles, title: "Cleanup Styles", systemImage: "wand.and.stars")
-                self.sidebarNavigationLink(.customDictionary, title: "Custom Dictionary", systemImage: "text.book.closed.fill")
-            } header: {
-                self.sidebarSectionHeader("Configure")
-            }
-
-            Section {
-                self.sidebarNavigationLink(.commandMode, title: "Command Mode", systemImage: "terminal.fill")
-                self.sidebarNavigationLink(.meetingTools, title: "File Transcription", systemImage: "doc.text.fill")
-            } header: {
-                self.sidebarSectionHeader("Use")
-            }
-
-            Section {
+                self.sidebarNavigationLink(.welcome, title: "Home", systemImage: "house.fill")
                 self.sidebarNavigationLink(.history, title: "History", systemImage: "clock.arrow.circlepath")
                 self.sidebarNavigationLink(.stats, title: "Stats", systemImage: "chart.bar.fill")
-            } header: {
-                self.sidebarSectionHeader("Activity")
             }
 
             Section {
-                self.sidebarNavigationLink(.welcome, title: "Getting Started", systemImage: "house.fill")
-                self.sidebarNavigationLink(.changelog, title: "Change logs", systemImage: "doc.text.magnifyingglass")
-                self.sidebarNavigationLink(.feedback, title: "Feedback", systemImage: "envelope.fill")
+                self.sidebarNavigationLink(.meetingTools, title: "Transcribe a File", systemImage: "doc.text.fill")
+                self.sidebarNavigationLink(.customDictionary, title: "Word List", systemImage: "text.book.closed.fill")
             } header: {
-                self.sidebarSectionHeader("Help")
+                self.sidebarSectionHeader("Tools")
             }
         }
         .listStyle(.sidebar)
@@ -1334,7 +1320,53 @@ struct ContentView: View {
             .listStyle(.sidebar)
             .accentColor(self.theme.palette.accent)
             .animation(nil, value: self.settingsNavigation.selectedSection)
+
+            self.advancedSettingsLinks
         }
+    }
+
+    /// The technical screens, kept out of the main sidebar but still reachable.
+    /// Removing them from navigation would have removed the features they
+    /// configure, which is not the same as decluttering.
+    private var advancedSettingsLinks: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            self.sidebarSectionHeader("Advanced")
+                .padding(.horizontal, self.theme.metrics.spacing.md)
+                .padding(.top, self.theme.metrics.spacing.sm)
+
+            self.advancedLink("Voice Engine", systemImage: "waveform", target: .voiceEngine)
+            self.advancedLink("AI Providers", systemImage: "cpu", target: .aiEnhancements)
+            self.advancedLink("Cleanup Styles", systemImage: "wand.and.stars", target: .cleanupStyles)
+        }
+        .padding(.bottom, self.theme.metrics.spacing.sm)
+    }
+
+    private func advancedLink(
+        _ title: String,
+        systemImage: String,
+        target: SidebarItem
+    ) -> some View {
+        Button {
+            self.closeSettings()
+            self.navigateToApp(target)
+        } label: {
+            HStack(spacing: self.theme.metrics.spacing.sm) {
+                Image(systemName: systemImage)
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundStyle(Color.secondary)
+                    .frame(width: 18)
+
+                Text(title)
+                    .foregroundStyle(Color.primary)
+
+                Spacer(minLength: 0)
+            }
+            .font(self.theme.typography.sidebarItem)
+            .padding(.horizontal, self.theme.metrics.spacing.md)
+            .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 
     private var isSettingsSearchActive: Bool {

@@ -36,7 +36,7 @@ struct PulseAudioVisualizationView: View {
             // Multiple pulsing rings
             ForEach(0..<3, id: \.self) { index in
                 Circle()
-                    .stroke(Color.fluidGreen.opacity(0.6 - Double(index) * 0.2), lineWidth: 2)
+                    .stroke(Color.appAccent.opacity(0.6 - Double(index) * 0.2), lineWidth: 2)
                     .frame(width: 40 + CGFloat(index) * 20, height: 40 + CGFloat(index) * 20)
                     .scaleEffect(
                         self.data.audioLevel > self.config.noiseThreshold ?
@@ -52,7 +52,7 @@ struct PulseAudioVisualizationView: View {
 
             // Center dot
             Circle()
-                .fill(Color.fluidGreen)
+                .fill(Color.appAccent)
                 .frame(width: 12, height: 12)
         }
         .frame(width: 100, height: 100)

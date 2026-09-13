@@ -45,7 +45,7 @@ struct MeetingTranscriptionView: View {
             VStack(spacing: 8) {
                 Image(systemName: "waveform.circle.fill")
                     .font(.system(size: 48))
-                    .foregroundStyle(Color.fluidGreen.gradient)
+                    .foregroundStyle(Color.appAccent.gradient)
 
                 Text("Meeting Transcription")
                     .font(.title2)
@@ -102,7 +102,7 @@ struct MeetingTranscriptionView: View {
                     .font(.caption)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
-                    .background(Color.fluidGreen.opacity(0.9))
+                    .background(Color.appAccent.opacity(0.9))
                     .foregroundColor(.white)
                     .cornerRadius(8)
                     .padding()
@@ -138,7 +138,7 @@ struct MeetingTranscriptionView: View {
                 HStack {
                     Image(systemName: "doc.fill")
                         .font(.title2)
-                        .foregroundColor(Color.fluidGreen)
+                        .foregroundColor(Color.appAccent)
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(fileURL.lastPathComponent)
@@ -266,7 +266,7 @@ struct MeetingTranscriptionView: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .strokeBorder(style: StrokeStyle(lineWidth: 2, dash: [8]))
-                        .foregroundColor(Color.fluidGreen.opacity(self.isDropTargeted ? 0.7 : 0.3))
+                        .foregroundColor(Color.appAccent.opacity(self.isDropTargeted ? 0.7 : 0.3))
                 )
                 .onDrop(of: [.fileURL], isTargeted: self.$isDropTargeted) { providers in
                     self.handleDrop(providers: providers)
@@ -380,7 +380,7 @@ struct MeetingTranscriptionView: View {
                                     Text(segment.speaker)
                                         .font(.caption)
                                         .fontWeight(.semibold)
-                                        .foregroundColor(Color.fluidGreen)
+                                        .foregroundColor(Color.appAccent)
 
                                     Text(segment.timestampText)
                                         .font(.caption2)
@@ -462,7 +462,7 @@ struct MeetingTranscriptionView: View {
             HStack {
                 Image(systemName: "doc.text.fill")
                     .font(.body)
-                    .foregroundColor(Color.fluidGreen)
+                    .foregroundColor(Color.appAccent)
                     .frame(width: 24)
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -482,7 +482,7 @@ struct MeetingTranscriptionView: View {
 
                 if isSelected {
                     Image(systemName: "chevron.right.circle.fill")
-                        .foregroundColor(Color.fluidGreen)
+                        .foregroundColor(Color.appAccent)
                 }
             }
             .padding(12)
@@ -491,7 +491,7 @@ struct MeetingTranscriptionView: View {
                     .fill(self.theme.palette.cardBackground)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .stroke(isSelected ? Color.fluidGreen.opacity(0.5) : self.theme.palette.cardBorder.opacity(0.3), lineWidth: isSelected ? 2 : 1)
+                            .stroke(isSelected ? Color.appAccent.opacity(0.5) : self.theme.palette.cardBorder.opacity(0.3), lineWidth: isSelected ? 2 : 1)
                     )
             )
         }

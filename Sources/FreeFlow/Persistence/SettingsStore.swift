@@ -2216,24 +2216,27 @@ final class SettingsStore: ObservableObject {
 
     // MARK: - Preferences Settings
 
+    /// Accent choices, using Apple's system colours rather than approximations,
+    /// so FreeFlow looks native beside the rest of macOS.
     enum AccentColorOption: String, CaseIterable, Identifiable, Codable {
-        case cyan = "Cyan"
-        case green = "Green"
         case blue = "Blue"
         case purple = "Purple"
+        case pink = "Pink"
         case orange = "Orange"
+        case green = "Green"
 
         var id: String {
             self.rawValue
         }
 
+        /// macOS dark-mode system colour values.
         var hex: String {
             switch self {
-            case .cyan: return "#3AC8C6"
-            case .green: return "#22C55E"
-            case .blue: return "#3B82F6"
-            case .purple: return "#A855F7"
-            case .orange: return "#F59E0B"
+            case .blue: return "#0A84FF"
+            case .purple: return "#BF5AF2"
+            case .pink: return "#FF375F"
+            case .orange: return "#FF9F0A"
+            case .green: return "#30D158"
             }
         }
     }
@@ -2319,7 +2322,7 @@ final class SettingsStore: ObservableObject {
             guard let raw = self.defaults.string(forKey: Keys.accentColorOption),
                   let option = AccentColorOption(rawValue: raw)
             else {
-                return .cyan
+                return .blue
             }
             return option
         }
@@ -2330,7 +2333,7 @@ final class SettingsStore: ObservableObject {
     }
 
     var accentColor: Color {
-        Color(hex: self.accentColorOption.hex) ?? Color(red: 0.227, green: 0.784, blue: 0.776)
+        Color(hex: self.accentColorOption.hex) ?? Color(nsColor: .systemBlue)
     }
 
     var themePreference: ThemePreference {

@@ -45,12 +45,12 @@ struct RecordingView: View {
                             // Status indicator
                             HStack {
                                 Circle()
-                                    .fill(self.asr.isRunning ? .red : self.asr.isAsrReady ? Color.fluidGreen : .secondary)
+                                    .fill(self.asr.isRunning ? .red : self.asr.isAsrReady ? Color.appAccent : .secondary)
                                     .frame(width: 8, height: 8)
 
                                 Text(self.asr.isRunning ? "Recording..." : self.asr.isAsrReady ? "Ready to record" : "Model not ready")
                                     .font(.subheadline)
-                                    .foregroundStyle(self.asr.isRunning ? .red : self.asr.isAsrReady ? Color.fluidGreen : .secondary)
+                                    .foregroundStyle(self.asr.isRunning ? .red : self.asr.isAsrReady ? Color.appAccent : .secondary)
                             }
 
                             // Recording Control (Single Toggle Button)

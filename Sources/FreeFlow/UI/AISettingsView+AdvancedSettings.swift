@@ -41,14 +41,14 @@ extension AIEnhancementSettingsView {
             HStack(spacing: 9) {
                 Image(systemName: "text.bubble.fill")
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.fluidGreen)
+                    .foregroundStyle(Color.appAccent)
                     .frame(width: 26, height: 26)
                     .background(
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(Color.fluidGreen.opacity(0.12))
+                            .fill(Color.appAccent.opacity(0.12))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                    .stroke(Color.fluidGreen.opacity(0.24), lineWidth: 1)
+                                    .stroke(Color.appAccent.opacity(0.24), lineWidth: 1)
                             )
                     )
 
@@ -76,7 +76,7 @@ extension AIEnhancementSettingsView {
     private func promptProfilesHelpRow(_ text: String) -> some View {
         HStack(alignment: .top, spacing: 8) {
             Circle()
-                .fill(Color.fluidGreen.opacity(0.75))
+                .fill(Color.appAccent.opacity(0.75))
                 .frame(width: 4, height: 4)
                 .padding(.top, 6)
 
@@ -111,7 +111,7 @@ extension AIEnhancementSettingsView {
         onDelete: (() -> Void)? = nil,
         isEnabled: Bool = true
     ) -> some View {
-        let tone = Color.fluidGreen
+        let tone = Color.appAccent
         let isHovering = self.hoveredPromptCardKey == cardKey
         let isDefaultRow = assignments?.isDefault == true
         let isSelectedRow = isDefaultRow || (assignments == nil && isSelected)
@@ -190,7 +190,7 @@ extension AIEnhancementSettingsView {
                 .overlay(
                     shape
                         .stroke(
-                            isSelectedRow ? Color.fluidGreen : (isHovering ? self.theme.palette.cardBorder.opacity(0.5) : self.theme.palette.cardBorder.opacity(0.3)),
+                            isSelectedRow ? Color.appAccent : (isHovering ? self.theme.palette.cardBorder.opacity(0.5) : self.theme.palette.cardBorder.opacity(0.3)),
                             lineWidth: isSelectedRow ? 2 : 1
                         )
                 )
@@ -225,12 +225,12 @@ extension AIEnhancementSettingsView {
                 .fill(self.theme.palette.contentBackground)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .stroke(isSelected ? Color.fluidGreen.opacity(0.5) : self.theme.palette.cardBorder.opacity(0.5), lineWidth: 1)
+                        .stroke(isSelected ? Color.appAccent.opacity(0.5) : self.theme.palette.cardBorder.opacity(0.5), lineWidth: 1)
                 )
 
             Image(systemName: symbol)
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(isSelected ? Color.fluidGreen : self.theme.palette.secondaryText)
+                .foregroundStyle(isSelected ? Color.appAccent : self.theme.palette.secondaryText)
         }
         .frame(width: 34, height: 34)
         .accessibilityHidden(true)
@@ -295,7 +295,7 @@ extension AIEnhancementSettingsView {
                 self.promptConfigChip(
                     systemImage: "cpu",
                     text: modelPicker.selectedModel.isEmpty
-                        ? (modelPicker.providerName.isEmpty ? "No model" : modelPicker.summary)
+                        ? (modelPicker.providerName.isEmpty ? "Not set up" : modelPicker.summary)
                         : modelPicker.selectedModel,
                     tone: tone
                 )
@@ -311,7 +311,7 @@ extension AIEnhancementSettingsView {
             } else {
                 self.promptConfigChip(
                     systemImage: "keyboard",
-                    text: "No shortcut",
+                    text: "No shortcut yet",
                     tone: self.theme.palette.tertiaryText,
                     isGhost: true
                 )
@@ -375,8 +375,8 @@ extension AIEnhancementSettingsView {
                 .fontWeight(.semibold)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 3)
-                .background(Capsule().fill(Color.fluidGreen.opacity(0.2)))
-                .foregroundStyle(Color.fluidGreen)
+                .background(Capsule().fill(Color.appAccent.opacity(0.2)))
+                .foregroundStyle(Color.appAccent)
         }
 
         if mode.normalized == .edit {
@@ -385,8 +385,8 @@ extension AIEnhancementSettingsView {
                 .fontWeight(.semibold)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 3)
-                .background(Capsule().fill(Color.fluidGreen.opacity(0.2)))
-                .foregroundStyle(Color.fluidGreen)
+                .background(Capsule().fill(Color.appAccent.opacity(0.2)))
+                .foregroundStyle(Color.appAccent)
         }
     }
 
@@ -968,8 +968,8 @@ extension AIEnhancementSettingsView {
 
                     Text(
                         isSelectedAppsOnly
-                            ? "Custom prompts only run in apps listed in App Overrides."
-                            : "Custom prompts run based on your shortcut or the app you're in."
+                            ? "Your styles apply only in the apps you list below."
+                            : "FreeFlow picks a style from your shortcut, or the app you're typing in."
                     )
                     .font(.caption2)
                     .foregroundStyle(self.theme.palette.secondaryText)
@@ -980,7 +980,7 @@ extension AIEnhancementSettingsView {
                         let defaultSelection = SettingsStore.DictationPromptSelection.default
                         self.promptProfileCard(
                             cardKey: "\(mode.normalized.rawValue)-default",
-                            title: mode.normalized == .dictate ? "Built-in Default" : "Default \(self.friendlyModeName(mode))",
+                            title: mode.normalized == .dictate ? "FreeFlow's default" : "Default \(self.friendlyModeName(mode))",
                             subtitle: "",
                             mode: mode,
                             isSelected: mode.normalized == .dictate
@@ -1094,7 +1094,7 @@ extension AIEnhancementSettingsView {
                         .font(.system(size: 12, weight: .semibold))
                         .frame(minWidth: AISettingsLayout.actionMinWidth, minHeight: AISettingsLayout.controlHeight)
                 }
-                .fluidCompactButton(isReady: true, foreground: Color.fluidGreen, borderColor: Color.fluidGreen.opacity(0.5))
+                .fluidCompactButton(isReady: true, foreground: Color.appAccent, borderColor: Color.appAccent.opacity(0.5))
             }
         }
         .frame(minHeight: AISettingsLayout.controlHeight)
@@ -1262,7 +1262,7 @@ extension AIEnhancementSettingsView {
                 Image(systemName: "app.dashed")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(self.theme.palette.secondaryText)
-                Text("App Overrides")
+                Text("Per-app styles")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(self.theme.palette.secondaryText)
 
@@ -1298,7 +1298,7 @@ extension AIEnhancementSettingsView {
             }
 
             if bindings.isEmpty {
-                Text("No app overrides yet. Add one to use a different prompt for a specific app.")
+                Text("Nothing here yet. Add an app to give it its own writing style — formal in Mail, loose in Messages.")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                     .padding(.horizontal, 4)

@@ -3241,7 +3241,7 @@ private enum BoostStrengthPreset: String, CaseIterable, Identifiable {
     var badgeColor: Color {
         switch self {
         case .mild: return .blue
-        case .balanced: return Color.fluidGreen
+        case .balanced: return Color.appAccent
         case .strong: return .orange
         }
     }

@@ -77,7 +77,7 @@ struct SetupStepView: View {
                         .foregroundStyle(.white)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(Color.fluidGreen, in: Capsule())
+                        .background(Color.appAccent, in: Capsule())
                 } else if self.showActionButton {
                     HStack(spacing: 3) {
                         Text(self.actionButtonTitle)
@@ -95,13 +95,13 @@ struct SetupStepView: View {
             .background(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(self.status == .completed
-                        ? Color.fluidGreen.opacity(0.06)
+                        ? Color.appAccent.opacity(0.06)
                         : self.theme.palette.cardBackground.opacity(0.5))
                     .overlay(
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
                             .stroke(
                                 self.status == .completed
-                                    ? Color.fluidGreen.opacity(0.25)
+                                    ? Color.appAccent.opacity(0.25)
                                     : self.theme.palette.cardBorder.opacity(0.2),
                                 lineWidth: 1
                             )
@@ -115,7 +115,7 @@ struct SetupStepView: View {
 
     private var statusColor: Color {
         switch self.status {
-        case .completed: return Color.fluidGreen
+        case .completed: return Color.appAccent
         case .inProgress: return .blue
         case .pending: return .secondary
         }

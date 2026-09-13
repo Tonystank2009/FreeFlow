@@ -2206,8 +2206,8 @@ struct OnboardingFlowView: View {
 
             self.onboardingModelMetricRow(
                 fillPercent: model.accuracyPercent,
-                color: Color.fluidGreen,
-                secondaryColor: .cyan,
+                color: Color.appAccent,
+                secondaryColor: Color.appAccent,
                 icon: "target",
                 label: "Accuracy"
             )

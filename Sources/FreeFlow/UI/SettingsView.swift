@@ -661,7 +661,7 @@ struct SettingsView: View {
                                 } else if self.hotkeyManagerInitialized {
                                     HStack(spacing: 6) {
                                         Image(systemName: "checkmark.circle.fill")
-                                            .foregroundStyle(Color.fluidGreen)
+                                            .foregroundStyle(Color.appAccent)
                                             .font(.caption)
                                         Text("Active")
                                             .font(.caption.weight(.semibold))

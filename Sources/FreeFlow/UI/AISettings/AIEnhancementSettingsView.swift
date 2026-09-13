@@ -152,10 +152,10 @@ struct AIEnhancementSettingsView: View {
                 .frame(width: 24, height: 24)
 
             VStack(alignment: .leading, spacing: 3) {
-                Text("Send Custom Prompt Only")
+                Text("Use only my wording")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(self.theme.palette.primaryText)
-                Text("For custom Dictate prompts, send your prompt without prepending the built-in dictation prompt.")
+                Text("Your instructions replace FreeFlow's built-in ones, instead of being added to them.")
                     .font(.caption2)
                     .foregroundStyle(self.theme.palette.secondaryText)
                     .fixedSize(horizontal: false, vertical: true)
@@ -169,7 +169,7 @@ struct AIEnhancementSettingsView: View {
             ))
             .toggleStyle(.switch)
             .labelsHidden()
-            .help("Send custom Dictate prompts without prepending the built-in dictation prompt.")
+            .help("Your instructions replace FreeFlow's built-in ones.")
         }
         .padding(.horizontal, 13)
         .padding(.vertical, 10)

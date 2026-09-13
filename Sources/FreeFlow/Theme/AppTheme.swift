@@ -369,8 +369,8 @@ struct AppTheme {
         )
     }
 
-    static let light = AppTheme.light(accent: .fluidGreen)
-    static let dark = AppTheme.dark(accent: .fluidGreen)
+    static let light = AppTheme.light(accent: .appAccent)
+    static let dark = AppTheme.dark(accent: .appAccent)
 }
 
 // MARK: - Helpers

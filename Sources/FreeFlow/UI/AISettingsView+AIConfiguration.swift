@@ -101,7 +101,7 @@ extension AIEnhancementSettingsView {
                     .foregroundStyle(self.theme.palette.primaryText)
                 Text(isProviders
                     ? "Configure local models and API providers."
-                    : "Choose how FreeFlow cleans up your dictation.")
+                    : "How FreeFlow tidies what you say before typing it.")
                     .font(.caption)
                     .foregroundStyle(self.theme.palette.secondaryText)
             }
@@ -365,7 +365,7 @@ extension AIEnhancementSettingsView {
             HStack(spacing: 6) {
                 Image(systemName: "checkmark.seal.fill")
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(Color.fluidGreen)
+                    .foregroundStyle(Color.appAccent)
                 Text("Verified providers")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(self.theme.palette.secondaryText)
@@ -561,7 +561,7 @@ extension AIEnhancementSettingsView {
     private func providerStatus(for item: ProviderItem) -> (text: String, color: Color, icon: String) {
         switch self.viewModel.connectionStatus(for: item.id) {
         case .success:
-            return ("Connection verified", Color.fluidGreen, "checkmark.circle.fill")
+            return ("Connection verified", Color.appAccent, "checkmark.circle.fill")
         case .failed:
             return ("Connection failed", .red, "exclamationmark.circle.fill")
         case .testing:
@@ -1029,7 +1029,7 @@ extension AIEnhancementSettingsView {
         if self.privateAILoadState.isLoaded(model.id) {
             return PrivateAIProviderModelStatus(
                 detail: "For dictation only.",
-                color: Color.fluidGreen
+                color: Color.appAccent
             )
         }
 
@@ -1043,21 +1043,21 @@ extension AIEnhancementSettingsView {
         if self.isPrivateAIModelVerified(model) {
             return PrivateAIProviderModelStatus(
                 detail: "For dictation only.",
-                color: Color.fluidGreen
+                color: Color.appAccent
             )
         }
 
         if PrivateAIIntegrationService.isModelInstalled(model) {
             return PrivateAIProviderModelStatus(
                 detail: "Ready to verify.",
-                color: Color.fluidGreen
+                color: Color.appAccent
             )
         }
 
         if PrivateAIIntegrationService.isLocalRuntimeConfigured {
             return PrivateAIProviderModelStatus(
                 detail: "Local model configured.",
-                color: Color.fluidGreen
+                color: Color.appAccent
             )
         }
 
@@ -1573,7 +1573,7 @@ extension AIEnhancementSettingsView {
 
                     Image(systemName: "checkmark.seal.fill")
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Color.fluidGreen)
+                        .foregroundStyle(Color.appAccent)
                 }
 
                 Spacer()
@@ -1709,7 +1709,7 @@ extension AIEnhancementSettingsView {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .stroke(isSelected ? Color.fluidGreen.opacity(0.9) : .clear, lineWidth: 2)
+                .stroke(isSelected ? Color.appAccent.opacity(0.9) : .clear, lineWidth: 2)
         )
         // Verified rows always have interactive elements, don't use drawingGroup
         .contentShape(Rectangle())
@@ -2281,11 +2281,11 @@ extension AIEnhancementSettingsView {
             Image(systemName: "lock.shield.fill").font(.system(size: 12))
             Text("Private").fontWeight(.medium)
         }
-        .font(.caption).foregroundStyle(Color.fluidGreen)
+        .font(.caption).foregroundStyle(Color.appAccent)
         .padding(.horizontal, 12).padding(.vertical, 8)
-        .background(RoundedRectangle(cornerRadius: 8).fill(Color.fluidGreen.opacity(0.15))
+        .background(RoundedRectangle(cornerRadius: 8).fill(Color.appAccent.opacity(0.15))
             .overlay(RoundedRectangle(cornerRadius: 8).stroke(
-                Color.fluidGreen.opacity(0.3),
+                Color.appAccent.opacity(0.3),
                 lineWidth: 1
             )))
     }
@@ -2549,8 +2549,8 @@ extension AIEnhancementSettingsView {
             // Connection Status Display
             if self.viewModel.connectionStatus == .success {
                 HStack(spacing: 8) {
-                    Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.fluidGreen).font(.caption)
-                    Text("Connection verified").font(.caption).foregroundStyle(Color.fluidGreen)
+                    Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.appAccent).font(.caption)
+                    Text("Connection verified").font(.caption).foregroundStyle(Color.appAccent)
                 }
             } else if self.viewModel.connectionStatus == .failed {
                 HStack(spacing: 8) {

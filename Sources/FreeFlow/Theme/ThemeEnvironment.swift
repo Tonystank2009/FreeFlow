@@ -60,7 +60,7 @@ extension Color {
         self.init(red: red, green: green, blue: blue)
     }
 
-    static var fluidGreen: Color {
+    static var appAccent: Color {
         SettingsStore.shared.accentColor
     }
 }

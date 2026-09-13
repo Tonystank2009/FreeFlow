@@ -1848,7 +1848,7 @@ final class AIEnhancementSettingsViewModel: ObservableObject {
                       $0.mode.normalized == mode.normalized
               })
         else {
-            return "Built-in Default"
+            return "FreeFlow's default"
         }
 
         let trimmed = profile.name.trimmingCharacters(in: .whitespacesAndNewlines)
