@@ -199,20 +199,19 @@ RELEASE_NOTES_*
 
 **.dmg
 **.dmg.zip
-# Documentation backups (for future reference, not needed in repo)
-docs/
+# docs/ and scripts/ are tracked in FreeFlow: GPL-3 requires the build
+# scripts that produce a release to ship with the source.
 
 
 .agent/
 create_dmg_only.sh
 **.m4a
-!Sources/Fluid/Resources/*.m4a
+!Sources/FreeFlow/Resources/*.m4a
 # Scratch directory
 scratch/
 
 assets/
 .swiftpm/
-scripts/
 
 # Benchmark / eval reports (local-only)
 benchmark_reports/
