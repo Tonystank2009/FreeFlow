@@ -172,11 +172,46 @@ xcodebuild -exportArchive \
 APP_PATH="$EXPORT_DIR/$APP_NAME.app"
 [ -d "$APP_PATH" ] || die "Export did not produce $APP_PATH"
 
+# ---------------------------------------------------------------- repair frameworks
+
+step "Repairing embedded framework layout"
+
+# transcribe-cpp-swift ships CTranscribe.framework with Versions/Current, the
+# root binary and Resources as real copies rather than symlinks. Each copy
+# carries its own code seal, and the stale ones still reference headers that
+# Xcode strips on copy — so `codesign --verify --deep` fails and notarisation
+# rejects the build. Rebuild them as a well-formed versioned bundle, then
+# re-sign inside-out.
+for fw in "$APP_PATH/Contents/Frameworks/"*.framework; do
+  [ -d "$fw/Versions/A" ] || continue
+  name=$(basename "$fw" .framework)
+
+  if [ -d "$fw/Versions/Current" ] && [ ! -L "$fw/Versions/Current" ]; then
+    rm -rf "$fw/Versions/Current"
+    ln -s "A" "$fw/Versions/Current"
+  fi
+
+  for item in "$name" Resources Headers Modules; do
+    if [ -e "$fw/$item" ] && [ ! -L "$fw/$item" ]; then
+      rm -rf "$fw/$item"
+      [ -e "$fw/Versions/Current/$item" ] && ln -s "Versions/Current/$item" "$fw/$item"
+    fi
+  done
+
+  codesign --force --sign "$SIGN_ID" --timestamp --options=runtime "$fw"
+  grn "  resealed $name.framework"
+done
+
+codesign --force --sign "$SIGN_ID" --timestamp --options=runtime \
+  --entitlements FreeFlow.entitlements "$APP_PATH"
+
 # ---------------------------------------------------------------- verify sig
 
 step "Verifying signature"
 
 codesign --verify --deep --strict --verbose=2 "$APP_PATH" 2>&1 | sed 's/^/    /'
+codesign --verify --deep --strict "$APP_PATH" 2>/dev/null \
+  || die "Deep signature verification failed — notarisation would reject this build."
 
 codesign -dv --verbose=4 "$APP_PATH" 2>&1 | grep -E "Authority|TeamIdentifier|flags" | sed 's/^/    /'
 
