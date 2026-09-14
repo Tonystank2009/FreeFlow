@@ -150,7 +150,7 @@ FreeFlow is GPL-3. Selling it is explicitly allowed, but you **must** publish
 the source for each binary you distribute.
 
 ```bash
-git remote add origin https://github.com/adhyanshupadhyaya/FreeFlow.git
+git remote add origin https://github.com/Tonystank2009/FreeFlow.git
 git push -u origin main
 git tag v1.0.0 && git push origin v1.0.0
 ```

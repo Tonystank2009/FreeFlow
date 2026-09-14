@@ -17,7 +17,7 @@ enum Brand {
     static let appName = "FreeFlow"
     static let bundleID = "com.freeflowapp.FreeFlow"
 
-    static let githubOwner = "adhyanshupadhyaya"
+    static let githubOwner = "Tonystank2009"
     static let githubRepo = "FreeFlow"
 
     static var githubSlug: String { "\(self.githubOwner)/\(self.githubRepo)" }

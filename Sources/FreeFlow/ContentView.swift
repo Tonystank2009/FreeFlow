@@ -1186,12 +1186,12 @@ struct ContentView: View {
     }
 
     private func openIssueReportingPage() {
-        guard let url = URL(string: "https://github.com/adhyanshupadhyaya/FreeFlow/issues/new/choose") else { return }
+        guard let url = URL(string: "https://github.com/Tonystank2009/FreeFlow/issues/new/choose") else { return }
         NSWorkspace.shared.open(url)
     }
 
     private func openHelpDocumentation() {
-        guard let url = URL(string: "https://github.com/adhyanshupadhyaya/FreeFlow#readme") else { return }
+        guard let url = URL(string: "https://github.com/Tonystank2009/FreeFlow#readme") else { return }
         NSWorkspace.shared.open(url)
     }
 

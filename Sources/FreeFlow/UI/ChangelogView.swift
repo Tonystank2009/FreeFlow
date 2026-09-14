@@ -311,7 +311,7 @@ private struct ChangelogNoteBlock: View {
             let lowercased = line.lowercased()
             return lowercased.contains("report issues:") ||
                 lowercased.contains("github.com/FREEFLOW_ORG/FreeFlow/issues") ||
-                lowercased.contains("github.com/adhyanshupadhyaya/freeflow/issues")
+                lowercased.contains("github.com/Tonystank2009/freeflow/issues")
         }
     }
 

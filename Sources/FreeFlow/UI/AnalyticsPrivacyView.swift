@@ -88,7 +88,7 @@ struct AnalyticsPrivacyView: View {
         }
 
         if let githubRange = text.range(of: "GitHub") {
-            text[githubRange].link = URL(string: "https://github.com/adhyanshupadhyaya/FreeFlow")
+            text[githubRange].link = URL(string: "https://github.com/Tonystank2009/FreeFlow")
             text[githubRange].foregroundColor = self.theme.palette.accent
         }
 

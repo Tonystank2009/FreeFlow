@@ -325,9 +325,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             "Manual update check requested. Current version: \(currentVersion)",
             source: "AppDelegate"
         )
-        DebugLogger.shared.info("Checking repository: adhyanshupadhyaya/FreeFlow", source: "AppDelegate")
+        DebugLogger.shared.info("Checking repository: Tonystank2009/FreeFlow", source: "AppDelegate")
         DebugLogger.shared.debug("🔍 DEBUG: Manual update check started - Current version: \(currentVersion)", source: "AppDelegate")
-        DebugLogger.shared.debug("🔍 DEBUG: Repository: adhyanshupadhyaya/FreeFlow", source: "AppDelegate")
+        DebugLogger.shared.debug("🔍 DEBUG: Repository: Tonystank2009/FreeFlow", source: "AppDelegate")
         let includePrerelease = SettingsStore.shared.betaReleasesEnabled
         DebugLogger.shared.info(
             "Beta releases opt-in: \(SettingsStore.shared.betaReleasesEnabled)",
@@ -382,7 +382,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             // Wait 3 seconds after launch before checking
             try? await Task.sleep(nanoseconds: 3_000_000_000)
 
-            DebugLogger.shared.info("Performing automatic update check for adhyanshupadhyaya/FreeFlow", source: "AppDelegate")
+            DebugLogger.shared.info("Performing automatic update check for Tonystank2009/FreeFlow", source: "AppDelegate")
 
             do {
                 let includePrerelease = SettingsStore.shared.betaReleasesEnabled

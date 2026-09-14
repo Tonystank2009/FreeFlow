@@ -46,7 +46,7 @@ entitled to remove it and rebuild.
 If money's tight, build it yourself:
 
 ```bash
-git clone https://github.com/adhyanshupadhyaya/FreeFlow
+git clone https://github.com/Tonystank2009/FreeFlow
 cd FreeFlow
 ./build.sh
 ```

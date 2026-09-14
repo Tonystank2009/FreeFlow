@@ -247,9 +247,14 @@ final class SimpleUpdater {
 
     // Allowed Apple Developer Team IDs for code-sign validation
     // Restrict update transitions to FreeFlow's approved signing teams.
+    /// Team IDs an update is allowed to come from.
+    ///
+    /// This is what makes over-the-air updates possible at all: a downloaded
+    /// build whose Team ID isn't here is rejected outright. Upstream's IDs were
+    /// still listed, which would have let a build signed by them replace this
+    /// app — and, worse, left FreeFlow's own future builds unrecognised.
     private let allowedTeamIDs: Set<String> = [
-        "V4J43B279J",
-        "537RRRT57V",
+        "D86H5QCS6J",
     ]
 
     private static let githubDateFormatter: ISO8601DateFormatter = {

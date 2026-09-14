@@ -84,7 +84,7 @@ struct FeedbackView: View {
                             Spacer()
 
                             HStack(spacing: 10) {
-                                if let githubURL = URL(string: "https://github.com/adhyanshupadhyaya/FreeFlow") {
+                                if let githubURL = URL(string: "https://github.com/Tonystank2009/FreeFlow") {
                                     Link(destination: githubURL) {
                                         HStack(spacing: 8) {
                                             Image(systemName: "star.fill")

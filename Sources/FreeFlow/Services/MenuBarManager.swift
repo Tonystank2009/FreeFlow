@@ -803,7 +803,7 @@ final class MenuBarManager: NSObject, ObservableObject, NSMenuDelegate {
     }
 
     private func openIssueReportingPage() {
-        guard let url = URL(string: "https://github.com/adhyanshupadhyaya/FreeFlow/issues/new/choose") else { return }
+        guard let url = URL(string: "https://github.com/Tonystank2009/FreeFlow/issues/new/choose") else { return }
         NSWorkspace.shared.open(url)
     }
 
@@ -854,7 +854,7 @@ final class MenuBarManager: NSObject, ObservableObject, NSMenuDelegate {
     }
 
     private func openAllReleasesPage() {
-        guard let url = URL(string: "https://github.com/adhyanshupadhyaya/FreeFlow/releases") else { return }
+        guard let url = URL(string: "https://github.com/Tonystank2009/FreeFlow/releases") else { return }
         NSWorkspace.shared.open(url)
     }
 

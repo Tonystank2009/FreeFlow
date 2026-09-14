@@ -18,7 +18,7 @@ COMPLETE CORRESPONDING SOURCE
   The complete source for this exact build, including the build scripts needed
   to reproduce it, is published at:
 
-      https://github.com/adhyanshupadhyaya/FreeFlow
+      https://github.com/Tonystank2009/FreeFlow
 
   Each release is tagged with its version number, so the source matching this
   binary is the tag whose name equals the version shown in FreeFlow > About.
@@ -29,7 +29,7 @@ COMPLETE CORRESPONDING SOURCE
 
 BUILDING IT YOURSELF
 
-      git clone https://github.com/adhyanshupadhyaya/FreeFlow
+      git clone https://github.com/Tonystank2009/FreeFlow
       cd FreeFlow
       ./build.sh
 
@@ -43,4 +43,4 @@ BASED ON FLUIDVOICE
 
 FULL LICENCE TEXT
 
-      https://github.com/adhyanshupadhyaya/FreeFlow/blob/main/LICENSE
+      https://github.com/Tonystank2009/FreeFlow/blob/main/LICENSE

@@ -492,7 +492,7 @@ struct SettingsView: View {
                                 .controlSize(.regular)
 
                                 Button("Release Notes") {
-                                    if let url = URL(string: "https://github.com/adhyanshupadhyaya/FreeFlow/releases") {
+                                    if let url = URL(string: "https://github.com/Tonystank2009/FreeFlow/releases") {
                                         NSWorkspace.shared.open(url)
                                     }
                                 }
@@ -1593,7 +1593,7 @@ struct SettingsView: View {
     }
 
     private func openIssueReportingPage() {
-        guard let url = URL(string: "https://github.com/adhyanshupadhyaya/FreeFlow/issues/new/choose") else { return }
+        guard let url = URL(string: "https://github.com/Tonystank2009/FreeFlow/issues/new/choose") else { return }
         NSWorkspace.shared.open(url)
     }
 
@@ -1826,7 +1826,7 @@ struct SettingsView: View {
     }
 
     private func openAllReleasesPage() {
-        guard let url = URL(string: "https://github.com/adhyanshupadhyaya/FreeFlow/releases") else { return }
+        guard let url = URL(string: "https://github.com/Tonystank2009/FreeFlow/releases") else { return }
         NSWorkspace.shared.open(url)
     }
 
@@ -2952,7 +2952,7 @@ struct AnalyticsConfirmationView: View {
         }
 
         if let githubRange = text.range(of: "GitHub") {
-            text[githubRange].link = URL(string: "https://github.com/adhyanshupadhyaya/FreeFlow")
+            text[githubRange].link = URL(string: "https://github.com/Tonystank2009/FreeFlow")
             text[githubRange].foregroundColor = self.theme.palette.accent
         }
 
