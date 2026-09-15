@@ -17,15 +17,16 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 const OPENROUTER_KEY = Deno.env.get("OPENROUTER_API_KEY") ?? "";
 const DODO_BASE = Deno.env.get("DODO_BASE_URL") ?? "https://live.dodopayments.com";
 
-/// DeepSeek Flash: about $0.15 per million input tokens and $0.60 per million
-/// output. A dictation is roughly 150 tokens each way, so even a heavy user
-/// doing 3,000 a month costs around $0.34 — a few percent of a $5 subscription.
+/// Mistral NeMo: $0.019 per million input tokens, $0.030 per million output.
+/// A dictation is roughly 150 tokens each way, so a heavy user doing 3,000 a
+/// month costs about $0.02 — well under 1% of a $5 subscription.
 ///
-/// Deliberately not the absolute cheapest on OpenRouter. Schematron is cheaper
-/// but is built for HTML-to-JSON extraction and mangles prose; Mercury is
-/// cheaper still only while an 80%-off promotion lasts, which is not something
-/// to build margins on.
-const MODEL = Deno.env.get("FORMAT_MODEL") ?? "deepseek/deepseek-flash-latest";
+/// Tidying punctuation and capitalisation is a shallow task, so a 12B model is
+/// ample. What a model this size does worse is resisting the text it is given:
+/// it is likelier to answer a question in the dictation, or to prefix its reply
+/// with "Here is the corrected text:". Both are handled below rather than by
+/// trusting the prompt.
+const MODEL = Deno.env.get("FORMAT_MODEL") ?? "mistralai/mistral-nemo";
 
 const SYSTEM_PROMPT = `You clean up dictated text.
 
@@ -62,6 +63,39 @@ async function licenceIsValid(licenseKey: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+const PREAMBLES = [
+  /^here(?:'s| is) the (?:corrected|formatted|cleaned)[^:]*:\s*/i,
+  /^(?:corrected|formatted|cleaned)(?: text)?:\s*/i,
+  /^sure[,!]?\s+here[^:]*:\s*/i,
+];
+
+/// Strips conversational preamble and rejects output that is not a formatted
+/// version of the input.
+///
+/// Length is the cheap tell. Formatting adds punctuation and line breaks, so a
+/// faithful result lands near the original; an answer to a question in the
+/// dictation, or a summary of it, does not. Returning null means "use the
+/// original" — a user who dictated a sentence should never receive a reply to
+/// it in their text field.
+function sanitise(output: string, original: string): string | null {
+  let text = output.trim();
+
+  for (const pattern of PREAMBLES) {
+    text = text.replace(pattern, "").trim();
+  }
+
+  // Models sometimes wrap the whole reply in a code fence.
+  const fenced = text.match(/^```(?:\w+)?\n([\s\S]*?)\n```$/);
+  if (fenced) text = fenced[1].trim();
+
+  if (!text) return null;
+
+  const ratio = text.length / Math.max(original.length, 1);
+  if (ratio < 0.5 || ratio > 2.0) return null;
+
+  return text;
 }
 
 Deno.serve(async (req) => {
@@ -131,12 +165,21 @@ Deno.serve(async (req) => {
   }
 
   const result = await completion.json();
-  const formatted = result?.choices?.[0]?.message?.content;
-  if (typeof formatted !== "string" || !formatted.trim()) {
+  const raw = result?.choices?.[0]?.message?.content;
+  if (typeof raw !== "string" || !raw.trim()) {
     return json({ error: "Formatting returned nothing usable." }, 502);
+  }
+
+  const formatted = sanitise(raw, text);
+  if (formatted === null) {
+    // The model answered the dictation instead of formatting it, or padded the
+    // reply with commentary. Returning the original is always safe; returning
+    // a hallucinated answer as if the user had said it is not.
+    console.warn("format rejected: output diverged from input");
+    return json({ text: text });
   }
 
   await admin.rpc("bump_format_usage", { key_in: licenseKey, day_in: today });
 
-  return json({ text: formatted.trim() });
+  return json({ text: formatted });
 });
