@@ -15,9 +15,14 @@ enum LicenseSource: Equatable {
     case licenseKey
 }
 
+/// What this install is entitled to.
+///
+/// Dictation is not represented here because dictation is free — there is
+/// nothing to be entitled to. This is only about hosted formatting, and even
+/// then it is a hint for the UI: the server decides, since a client-side copy
+/// of the rule would just be a second one to keep in sync.
 enum LicenseState: Equatable {
-    case trial(remaining: Int)
-    case trialExhausted
+    case free
     case licensed(LicenseSource)
 
     var isLicensed: Bool {
@@ -37,7 +42,7 @@ final class LicenseManager: ObservableObject {
     static let shared = LicenseManager()
 
     // Entitlement
-    @Published private(set) var state: LicenseState = .trial(remaining: Brand.Purchase.freeDictations)
+    @Published private(set) var state: LicenseState = .free
 
     // Account
     @Published private(set) var session: SupabaseSession?
@@ -82,59 +87,19 @@ final class LicenseManager: ObservableObject {
             return
         }
 
-        let remaining = TrialCounter.remaining
-        self.state = remaining > 0 ? .trial(remaining: remaining) : .trialExhausted
+        self.state = .free
     }
 
     var isSignedIn: Bool { self.session != nil }
     var accountEmail: String? { self.session?.email }
 
-    // MARK: - Gating
-
-    /// The single question the dictation pipeline asks.
-    var canStartDictation: Bool {
-        switch self.state {
-        case .licensed: return true
-        case let .trial(remaining): return remaining > 0
-        case .trialExhausted: return false
-        }
-    }
-
-    var remainingFreeDictations: Int {
-        switch self.state {
-        case .licensed: return .max
-        case let .trial(remaining): return remaining
-        case .trialExhausted: return 0
-        }
-    }
-
-    /// Shows the paywall when out of free runs. Returns false to abort.
-    func requestDictationPermission() -> Bool {
-        if self.canStartDictation { return true }
-        self.presentUnlock()
-        return false
-    }
+    // MARK: - Unlock prompt
 
     func presentUnlock() {
-        guard Brand.Purchase.isPaywallEnabled else { return }
         self.errorMessage = nil
         self.infoMessage = nil
         self.isUnlockPromptPresented = true
         NSApp.activate(ignoringOtherApps: true)
-    }
-
-    /// Called once a dictation has actually delivered text. Deliberately *not*
-    /// called when a dictation fails, is empty, or is cancelled — nobody should
-    /// burn a free run on a dictation that did nothing for them.
-    func consumeDictation() {
-        guard !self.state.isLicensed else { return }
-
-        TrialCounter.increment()
-        self.recomputeState()
-
-        if case .trialExhausted = self.state {
-            self.presentUnlock()
-        }
     }
 
     // MARK: - Launch

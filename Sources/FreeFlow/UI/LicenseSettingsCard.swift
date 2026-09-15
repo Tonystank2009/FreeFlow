@@ -49,7 +49,7 @@ struct LicenseSettingsCard: View {
                             }
                         }
                     } else {
-                        Button("Unlock FreeFlow — \(Brand.Purchase.priceDisplay)") {
+                        Button("Turn on AI formatting — \(Brand.Purchase.priceDisplay) \(Brand.Purchase.priceCadence)") {
                             self.license.presentUnlock()
                         }
                         .buttonStyle(.borderedProminent)
@@ -75,25 +75,22 @@ struct LicenseSettingsCard: View {
     private var statusIcon: String {
         switch self.license.state {
         case .licensed: return "checkmark.seal.fill"
-        case .trial: return "clock"
-        case .trialExhausted: return "lock.fill"
+        case .free: return "sparkles"
         }
     }
 
     private var statusColor: Color {
         switch self.license.state {
         case .licensed: return self.theme.palette.success
-        case .trial: return self.theme.palette.accent
-        case .trialExhausted: return self.theme.palette.warning
+        case .free: return self.theme.palette.secondaryText
         }
     }
 
     private var statusTitle: String {
         switch self.license.state {
-        case .licensed: return "Unlocked"
-        case let .trial(remaining):
-            return "Trial — \(remaining) free \(remaining == 1 ? "dictation" : "dictations") left"
-        case .trialExhausted: return "Trial finished"
+        case .licensed: return "AI formatting on"
+        case .free:
+            return "Dictation active · AI formatting off"
         }
     }
 
@@ -107,10 +104,10 @@ struct LicenseSettingsCard: View {
                 let masked = self.license.installedLicenseRecord?.maskedKey ?? ""
                 return "Unlocked on this Mac with licence key \(masked)."
             }
-        case .trial:
-            return "One payment of \(Brand.Purchase.priceDisplay) unlocks FreeFlow forever, including all future updates."
-        case .trialExhausted:
-            return "Unlock to keep dictating. One payment of \(Brand.Purchase.priceDisplay), no subscription."
+        case .free:
+            return "Dictation is free forever. AI formatting tidies punctuation and "
+                + "paragraphs — free for \(Brand.Purchase.trialDays) days, then "
+                + "\(Brand.Purchase.priceDisplay) \(Brand.Purchase.priceCadence)."
         }
     }
 }

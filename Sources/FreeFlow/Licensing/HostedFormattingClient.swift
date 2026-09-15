@@ -56,9 +56,16 @@ final class HostedFormattingClient {
         }
     }
 
+    /// Formatting is attempted whenever there is a server to ask. Whether this
+    /// install is subscribed or still in its trial is the server's call, not
+    /// the client's — a client-side check would just be a second, wrong copy of
+    /// the same rule.
     var isAvailable: Bool {
-        Brand.Supabase.isConfigured && LicenseManager.shared.installedLicenseRecord != nil
+        Brand.Supabase.isConfigured
     }
+
+    private(set) var trialDaysLeft: Int?
+    private(set) var trialHasExpired = false
 
     /// Cleans up dictated text. Throws rather than returning partial results, so
     /// the caller can fall back to the raw transcription.
@@ -66,9 +73,9 @@ final class HostedFormattingClient {
         guard let projectURL = Brand.Supabase.projectURL else {
             throw HostedFormattingError.notConfigured
         }
-        guard let licenseKey = await LicenseManager.shared.installedLicenseRecord?.licenseKey else {
-            throw HostedFormattingError.notSubscribed
-        }
+        // A subscriber sends their licence key; everyone else sends the
+        // install id and is served by the trial.
+        let licenseKey = await LicenseManager.shared.installedLicenseRecord?.licenseKey
 
         var request = URLRequest(
             url: projectURL.appendingPathComponent("functions/v1/format-text")
@@ -76,10 +83,13 @@ final class HostedFormattingClient {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(Brand.Supabase.anonKey, forHTTPHeaderField: "apikey")
-        request.httpBody = try JSONSerialization.data(withJSONObject: [
-            "license_key": licenseKey,
-            "text": text,
-        ])
+        var body: [String: Any] = ["text": text]
+        if let licenseKey, !licenseKey.isEmpty {
+            body["license_key"] = licenseKey
+        } else {
+            body["trial_id"] = InstallIdentity.current
+        }
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
         let data: Data
         let response: URLResponse
@@ -95,7 +105,10 @@ final class HostedFormattingClient {
 
         switch http.statusCode {
         case 200: break
-        case 402: throw HostedFormattingError.notSubscribed
+        case 402:
+            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+            self.trialHasExpired = (json?["trial_expired"] as? Bool) ?? false
+            throw HostedFormattingError.notSubscribed
         case 413: throw HostedFormattingError.tooLong
         case 429: throw HostedFormattingError.rateLimited
         case 503: throw HostedFormattingError.notConfigured
@@ -110,6 +123,8 @@ final class HostedFormattingClient {
             throw HostedFormattingError.unavailable
         }
 
+        self.trialDaysLeft = json["trial_days_left"] as? Int
+        self.trialHasExpired = false
         return formatted
     }
 }

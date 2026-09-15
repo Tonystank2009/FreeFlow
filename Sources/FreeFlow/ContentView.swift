@@ -2610,10 +2610,6 @@ struct ContentView: View {
             dictationSlot: activeDictationSlot,
             appBundleID: appInfo.bundleId
         )
-        // Counts against the free allowance only now that we know this
-        // dictation actually produced text for the user.
-        LicenseManager.shared.consumeDictation()
-
         AnalyticsService.shared.recordUsage(
             mode: .dictation,
             transcriptionModel: self.settings.selectedSpeechModel.analyticsDescriptor,
@@ -3571,16 +3567,6 @@ struct ContentView: View {
         )
         guard !self.asr.isRunningOrStarting else {
             DebugLogger.shared.debug("ContentView: start ignored because capture is already active", source: "ContentView")
-            return
-        }
-
-        // Paywall. Checked before the mic opens so an out-of-trial user is
-        // never left talking to an app that will refuse to type the result.
-        guard LicenseManager.shared.requestDictationPermission() else {
-            DebugLogger.shared.info(
-                "ContentView: start blocked — free dictations exhausted",
-                source: "ContentView"
-            )
             return
         }
 

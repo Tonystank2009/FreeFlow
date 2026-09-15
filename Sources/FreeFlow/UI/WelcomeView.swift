@@ -431,7 +431,7 @@ struct OnboardingFlowView: View {
             case .permissions:
                 return "Enable Access"
             case .pricing:
-                return "Free to Try"
+                return "Pricing"
             case .playground:
                 return "Try FreeFlow"
             }
@@ -450,7 +450,7 @@ struct OnboardingFlowView: View {
             case .permissions:
                 return "Allow FreeFlow to listen and type into other apps."
             case .pricing:
-                return "Five dictations free, then one payment."
+                return "Free to dictate. Formatting is the paid part."
             case .playground:
                 return "Use your dictation shortcut once before finishing setup."
             }
@@ -1738,7 +1738,7 @@ struct OnboardingFlowView: View {
                                 .padding(.bottom, 16)
 
                             Text("FreeFlow types what you say, in any app and on any website. "
-                                + "It runs on your Mac, so nothing you say is ever uploaded.")
+                                + "Dictation runs on your Mac and is free forever.")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundStyle(Color.white.opacity(0.70))
                                 .multilineTextAlignment(.center)
@@ -1750,7 +1750,7 @@ struct OnboardingFlowView: View {
                             self.offerLine
                                 .padding(.bottom, 14)
 
-                            Text("No subscription. Others charge $15 every month.")
+                            Text("Cancel any time. Wispr Flow charges $15 a month, and needs the cloud to work at all.")
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundStyle(Color.white.opacity(0.40))
                         }
@@ -1784,11 +1784,11 @@ struct OnboardingFlowView: View {
     /// The whole offer in one line: try it, then pay once.
     private var offerLine: some View {
         HStack(spacing: 0) {
-            self.offerBeat("Try 5 free", isEmphasis: false)
+            self.offerBeat("Dictation free forever", isEmphasis: false)
             self.offerArrow
-            self.offerBeat("Pay $5 once", isEmphasis: true)
+            self.offerBeat("AI formatting \(Brand.Purchase.trialDays) days free", isEmphasis: false)
             self.offerArrow
-            self.offerBeat("Free forever", isEmphasis: false)
+            self.offerBeat("then $5/mo", isEmphasis: true)
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 22)

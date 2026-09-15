@@ -49,7 +49,7 @@ struct UnlockView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: self.theme.metrics.spacing.xs) {
-            Text(self.license.state.isLicensed ? "FreeFlow is unlocked" : "Unlock FreeFlow")
+            Text(self.license.state.isLicensed ? "AI formatting is on" : "Turn on AI formatting")
                 .font(self.theme.typography.title)
                 .foregroundStyle(self.theme.palette.primaryText)
 
@@ -63,14 +63,11 @@ struct UnlockView: View {
     private var subtitle: String {
         switch self.license.state {
         case .licensed:
-            return "Thank you. Every future update is included."
-        case let .trial(remaining):
-            let noun = remaining == 1 ? "task" : "tasks"
-            return "You have \(remaining) free \(noun) left. "
-                + "One payment of \(Brand.Purchase.priceDisplay) unlocks FreeFlow forever."
-        case .trialExhausted:
-            return "You've used your \(Brand.Purchase.freeDictations) free tasks. "
-                + "\(Brand.Purchase.priceDisplay) once, and it's yours forever — no subscription."
+            return "AI formatting is active. Dictation stays free, as always."
+        case .free:
+            return "Dictation is free forever. AI formatting cleans up punctuation "
+                + "and paragraphs automatically — free for \(Brand.Purchase.trialDays) days, "
+                + "then \(Brand.Purchase.priceDisplay) \(Brand.Purchase.priceCadence)."
         }
     }
 
@@ -81,7 +78,7 @@ struct UnlockView: View {
             Button {
                 self.license.openCheckout()
             } label: {
-                Text("Buy FreeFlow — \(Brand.Purchase.priceDisplay) once")
+                Text("Subscribe — \(Brand.Purchase.priceDisplay) \(Brand.Purchase.priceCadence)")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
@@ -94,7 +91,7 @@ struct UnlockView: View {
                     .font(self.theme.typography.bodySmallStrong)
                     .foregroundStyle(self.theme.palette.primaryText)
 
-                Text("Paste the licence key from your receipt.")
+                Text("Paste the licence key from your subscription receipt.")
                     .font(self.theme.typography.caption)
                     .foregroundStyle(self.theme.palette.secondaryText)
 
@@ -115,7 +112,7 @@ struct UnlockView: View {
 
     private var licensedBody: some View {
         VStack(alignment: .leading, spacing: self.theme.metrics.spacing.sm) {
-            Label("All features unlocked on this Mac.", systemImage: "checkmark.seal.fill")
+            Label("AI formatting is active on this Mac.", systemImage: "checkmark.seal.fill")
                 .font(self.theme.typography.bodySmall)
                 .foregroundStyle(self.theme.palette.success)
 
