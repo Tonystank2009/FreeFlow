@@ -2317,6 +2317,21 @@ final class SettingsStore: ObservableObject {
         }
     }
 
+    /// Shows the small bar at the bottom of the screen. On by default: the
+    /// hotkey is invisible, and a first-time user who forgets it has no other
+    /// way to start a dictation.
+    var idleBarEnabled: Bool {
+        get {
+            if self.defaults.object(forKey: Keys.idleBarEnabled) == nil { return true }
+            return self.defaults.bool(forKey: Keys.idleBarEnabled)
+        }
+        set {
+            objectWillChange.send()
+            self.defaults.set(newValue, forKey: Keys.idleBarEnabled)
+            Task { @MainActor in IdleBarWindowController.shared.refreshVisibility() }
+        }
+    }
+
     var accentColorOption: AccentColorOption {
         get {
             guard let raw = self.defaults.string(forKey: Keys.accentColorOption),
@@ -5349,6 +5364,7 @@ private extension SettingsStore {
         static let launchAtStartup = "LaunchAtStartup"
         static let showInDock = "ShowInDock"
         static let accentColorOption = "AccentColorOption"
+        static let idleBarEnabled = "IdleBarEnabled"
         static let themePreference = "ThemePreference"
         static let enableTranscriptionSounds = "EnableTranscriptionSounds"
         static let transcriptionStartSound = "TranscriptionStartSound"

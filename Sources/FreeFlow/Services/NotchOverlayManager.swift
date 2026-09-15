@@ -206,6 +206,7 @@ final class NotchOverlayManager {
         self.lastAudioPublisher = audioLevelPublisher
         self.currentMode = self.normalizedOverlayMode(mode)
 
+        IdleBarWindowController.shared.setSuppressed(true)
         BottomOverlayWindowController.shared.show(audioPublisher: audioLevelPublisher, mode: self.currentMode)
         self.isBottomOverlayVisible = true
         Self.overlayBench("bottom_route_return elapsedMs=\(Self.elapsedMs(since: startedAt))")
@@ -222,6 +223,7 @@ final class NotchOverlayManager {
         if self.isBottomOverlayVisible {
             BottomOverlayWindowController.shared.hide()
             self.isBottomOverlayVisible = false
+            IdleBarWindowController.shared.setSuppressed(false)
         }
 
         // Increment generation for this operation

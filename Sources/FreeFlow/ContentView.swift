@@ -3785,6 +3785,14 @@ struct ContentView: View {
         NotchContentState.shared.onOpenPreferencesRequested = {
             self.menuBarManager.openPreferencesFromUI()
         }
+
+        IdleBarState.shared.onStartDictationRequested = {
+            self.startRecording()
+        }
+        IdleBarState.shared.onOpenPreferencesRequested = {
+            self.menuBarManager.openPreferencesFromUI()
+        }
+        IdleBarWindowController.shared.start()
         NotchContentState.shared.onCancelRequested = {
             _ = self.handleCancelShortcut()
         }
