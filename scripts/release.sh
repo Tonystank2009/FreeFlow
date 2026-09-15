@@ -286,6 +286,19 @@ fi
 
 # ---------------------------------------------------------------- done
 
+# ---------------------------------------------------------------- ota asset
+
+step "Building the OTA update asset"
+
+# SimpleUpdater only accepts a .zip asset — with a DMG alone it silently gives
+# up and opens the releases web page instead of updating. Every release needs
+# both. ditto is required over zip(1): it preserves the notarisation ticket and
+# the code signature.
+ZIP_PATH="$DIST_DIR/$APP_NAME-$VERSION.zip"
+rm -f "$ZIP_PATH"
+ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
+grn "  $ZIP_PATH"
+
 SIZE=$(du -h "$DMG_PATH" | cut -f1)
 step "Done"
 grn "  $DMG_PATH  ($SIZE)"
@@ -299,4 +312,5 @@ echo "Next:"
 echo "  1. Test on a second Mac (or: xattr -w com.apple.quarantine ... to simulate)"
 echo "  2. Publish the matching source tag — GPL-3 requires it:"
 echo "       git tag v$VERSION && git push origin v$VERSION"
-echo "  3. Attach the DMG to the GitHub release so the in-app updater finds it."
+echo "  3. Attach BOTH the .dmg and the .zip to the GitHub release."
+echo "     The updater reads the .zip; the .dmg is what humans download."
