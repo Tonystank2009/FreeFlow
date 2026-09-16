@@ -186,7 +186,7 @@ struct SettingsView: View {
                 Section("ON-DEVICE") {
                     Text("Fast — No cleanup").tag("__OFF__")
                     if PrivateFeatures.privateAIProvider {
-                        Text("Cleanup — Fluid-1")
+                        Text("Cleanup — On-device AI")
                             .tag(PrivateAIProviderPromptFormat.promptSelectionID)
                             .disabled(!privateAILocked)
                     }

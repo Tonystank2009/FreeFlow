@@ -1612,7 +1612,7 @@ private struct BottomOverlayPromptMenuView: View {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text("Cleanup")
                 Spacer(minLength: 12)
-                Text("Fluid-1")
+                Text("On-device AI")
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(.white.opacity(0.45))
                 if isSelected {

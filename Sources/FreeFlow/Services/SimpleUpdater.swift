@@ -610,7 +610,7 @@ final class SimpleUpdater {
         let base = self.fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
         let support = base ?? URL(fileURLWithPath: NSTemporaryDirectory())
         return support
-            .appendingPathComponent("Fluid", isDirectory: true)
+            .appendingPathComponent("FreeFlow", isDirectory: true)
             .appendingPathComponent(self.rollbackBackupDirectoryName, isDirectory: true)
             .appendingPathComponent(self.installedAppName, isDirectory: true)
     }

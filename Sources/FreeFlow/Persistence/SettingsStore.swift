@@ -114,7 +114,7 @@ final class SettingsStore: ObservableObject {
         var id: String { self.rawValue }
 
         /// Default backend when no preference is stored.
-        /// Apple Silicon → MLX (fastest Fluid-1 path). Intel → llama.cpp.
+        /// Apple Silicon → MLX (fastest On-device AI path). Intel → llama.cpp.
         static var systemDefault: PrivateAIBackendPreference {
             CPUArchitecture.isAppleSilicon ? .mlx : .llama
         }

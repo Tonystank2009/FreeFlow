@@ -1796,7 +1796,7 @@ final class AIEnhancementSettingsViewModel: ObservableObject {
         guard let target = self.resolveBindingTargetApp() else {
             self.appPromptBindingErrorMessage = "Could not detect a target app. Focus another app window (outside FreeFlow) and try again."
             DebugLogger.shared.info(
-                "App prompt binding skipped: unable to resolve non-Fluid target app",
+                "App prompt binding skipped: unable to resolve non-FreeFlow target app",
                 source: "AISettingsView"
             )
             return

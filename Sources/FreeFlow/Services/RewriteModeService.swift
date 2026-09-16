@@ -271,7 +271,7 @@ final class RewriteModeService: ObservableObject {
                 throw NSError(
                     domain: "RewriteMode",
                     code: -5,
-                    userInfo: [NSLocalizedDescriptionKey: "Selected Fluid-1 model is not installed and verified"]
+                    userInfo: [NSLocalizedDescriptionKey: "Selected On-device AI model is not installed and verified"]
                 )
             }
             runtimeModel = verifiedModelID
