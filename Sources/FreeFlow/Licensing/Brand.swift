@@ -57,12 +57,12 @@ enum Brand {
 
         /// Dodo Payments hosted checkout link for the one-time $5 product.
         /// Dashboard → Products → your product → Share / Payment Link.
-        static let checkoutURLString = "REPLACE_ME_DODO_CHECKOUT_URL"
+        static let checkoutURLString = "https://checkout.dodopayments.com/buy/pdt_0Nnjrf4MXFXfMoYZxEE07"
 
         /// Dodo product id (`pdt_…`). Activation responses are checked against
         /// this so a licence minted for a *different* product cannot unlock
         /// FreeFlow.
-        static let productID = "REPLACE_ME_DODO_PRODUCT_ID"
+        static let productID = "pdt_0Nnjrf4MXFXfMoYZxEE07"
 
         static var checkoutURL: URL? {
             guard !self.checkoutURLString.hasPrefix("REPLACE_ME") else { return nil }
