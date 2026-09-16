@@ -359,7 +359,6 @@ struct OnboardingFlowView: View {
     @State private var hoveredFooterButton: OnboardingFooterButton?
     @State private var isShowingAllLanguages = false
     @ObservedObject private var license = LicenseManager.shared
-    @State private var emailField = ""
     @State private var isShowingOtherModelRoutes = false
     @State private var hasStartedAutomaticModelSetup = false
     @State private var automaticSetupDidFail = false
@@ -398,17 +397,15 @@ struct OnboardingFlowView: View {
     }
 
     private enum Step: Int, CaseIterable {
-        case email = 0
-        case landing = 1
-        case language = 2
-        case voiceModel = 3
-        case permissions = 4
-        case playground = 5
-        case pricing = 6
+        case landing = 0
+        case language = 1
+        case voiceModel = 2
+        case permissions = 3
+        case playground = 4
+        case pricing = 5
 
         var analyticsStep: AnalyticsOnboardingStep {
             switch self {
-            case .email: .welcome
             case .landing: .welcome
             case .language: .language
             case .voiceModel: .voiceModel
@@ -420,8 +417,6 @@ struct OnboardingFlowView: View {
 
         var title: String {
             switch self {
-            case .email:
-                return "Stay in Touch"
             case .landing:
                 return "Welcome"
             case .language:
@@ -439,8 +434,6 @@ struct OnboardingFlowView: View {
 
         var subtitle: String {
             switch self {
-            case .email:
-                return "So we can send your licence key."
             case .landing:
                 return "Talk anywhere. FreeFlow types for you."
             case .language:
@@ -611,8 +604,6 @@ struct OnboardingFlowView: View {
         }
 
         switch self.step {
-        case .email:
-            return true
         case .landing:
             return true
         case .language:
@@ -630,8 +621,6 @@ struct OnboardingFlowView: View {
 
     private var primaryButtonTitle: String {
         switch self.step {
-        case .email:
-            return self.emailField.isEmpty ? "Skip" : "Continue"
         case .landing:
             return "Next"
         case .language:
@@ -775,8 +764,6 @@ struct OnboardingFlowView: View {
     @ViewBuilder
     private var stepContent: some View {
         switch self.step {
-        case .email:
-            self.emailStep
         case .landing:
             self.landingStep
         case .language:
@@ -789,89 +776,6 @@ struct OnboardingFlowView: View {
             self.pricingStep
         case .playground:
             self.playgroundStep
-        }
-    }
-
-    /// First screen: one field, one button, and a skip.
-    ///
-    /// No account, no password, no emailed code — the address is taken at face
-    /// value. Verifying it would cost a whole extra step, and the thing being
-    /// protected is a mailing list, not a login.
-    private var emailStep: some View {
-        GeometryReader { proxy in
-            ZStack {
-                FreeFlowOnboardingLandingBackdrop(glowCenter: self.landingGlowCenter)
-
-                VStack(spacing: 0) {
-                    FreeFlowOnboardingCompactProgress(value: self.compactProgressValue)
-                        .padding(.top, 28)
-
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: 0) {
-                            FreeFlowOnboardingCompactAppIconMark(size: 66)
-                                .padding(.bottom, 22)
-
-                            Text("Where should we\nreach you?")
-                                .font(.system(size: 30, weight: .semibold))
-                                .foregroundStyle(.white)
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(2)
-                                .padding(.bottom, 12)
-
-                            Text("For your licence key when you buy, and the occasional note "
-                                + "about what we're building. No spam, leave any time.")
-                                .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color.white.opacity(0.62))
-                                .multilineTextAlignment(.center)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .frame(width: 400)
-                                .padding(.bottom, 26)
-
-                            TextField("you@example.com", text: self.$emailField)
-                                .textFieldStyle(.plain)
-                                .font(.system(size: 15, weight: .medium))
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 11)
-                                .frame(width: 340)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                        .fill(Color.white.opacity(0.07))
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-                                        )
-                                )
-                                .onSubmit { self.handlePrimaryAction() }
-
-                            if let error = license.errorMessage {
-                                Text(error)
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundStyle(Color(nsColor: .systemRed))
-                                    .padding(.top, 12)
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 30)
-                        .padding(.bottom, 12)
-                    }
-
-                    self.cinematicFooter(
-                        continueTitle: self.primaryButtonTitle,
-                        canContinue: true
-                    ) {
-                        self.handlePrimaryAction()
-                    }
-                }
-
-                FreeFlowOnboardingLandingHoverTracker(
-                    onMove: { location, size in
-                        self.updateLandingGlow(location: location, in: size)
-                    },
-                    onExit: { self.resetLandingGlow() }
-                )
-                .frame(width: proxy.size.width, height: proxy.size.height)
-                .accessibilityHidden(true)
-            }
         }
     }
 
@@ -2728,10 +2632,6 @@ struct OnboardingFlowView: View {
     }
 
     private func goNext(outcome: AnalyticsOnboardingOutcome = .continued) {
-        if self.step == .email, !self.emailField.isEmpty {
-            let address = self.emailField
-            Task { await self.license.captureEmail(address) }
-        }
 
         self.completeCurrentStep(outcome: outcome)
         self.activeShortcutRecordingTarget = nil
