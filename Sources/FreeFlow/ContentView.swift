@@ -2619,6 +2619,29 @@ struct ContentView: View {
             ) : nil
         )
 
+        // Hosted formatting, for subscribers and trialists who have not set up a
+        // provider of their own. Someone who configured their own key asked for
+        // that specific model; quietly substituting ours would be surprising.
+        var hostedFormatted: String?
+        if !shouldUseAI, !sendsExistingDraft, HostedFormattingClient.shared.isAvailable,
+           !normalizedTranscribedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        {
+            NotchOverlayManager.shared.updateTranscriptionText("Polishing")
+            do {
+                hostedFormatted = try await HostedFormattingClient.shared.format(normalizedTranscribedText)
+                postProcessingModel = "freeflow-hosted"
+                DebugLogger.shared.info("Hosted formatting applied", source: "ContentView")
+            } catch {
+                // Never block a dictation on formatting. Raw text typed beats
+                // nothing typed, and the user is watching a cursor.
+                DebugLogger.shared.info(
+                    "Hosted formatting skipped: \(error.localizedDescription)",
+                    source: "ContentView"
+                )
+            }
+            NotchOverlayManager.shared.updateTranscriptionText("")
+        }
+
         if shouldUseAI {
             DebugLogger.shared.debug("Routing transcription through AI post-processing", source: "ContentView")
             postProcessingModel = postProcessingModelInfo.model
@@ -2683,7 +2706,7 @@ struct ContentView: View {
             NotchOverlayManager.shared.updateTranscriptionText("")
 
         } else {
-            finalText = normalizedTranscribedText
+            finalText = hostedFormatted ?? normalizedTranscribedText
         }
 
         // Normalize literal command and mention syntax after AI cleanup and before final user preferences.

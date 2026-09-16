@@ -1633,7 +1633,7 @@ struct OnboardingFlowView: View {
                             FreeFlowOnboardingCompactAppIconMark(size: 66)
                                 .padding(.bottom, 22)
 
-                            Text("Stop typing.\nStart talking.")
+                            Text("You're all set.")
                                 .font(.system(size: 32, weight: .semibold))
                                 .foregroundStyle(.white)
                                 .multilineTextAlignment(.center)
@@ -1641,8 +1641,8 @@ struct OnboardingFlowView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                                 .padding(.bottom, 16)
 
-                            Text("FreeFlow types what you say, in any app and on any website. "
-                                + "Dictation runs on your Mac and is free forever.")
+                            Text("Dictation is free, forever. It runs on your Mac, so it works "
+                                + "offline and nothing you say is uploaded.")
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundStyle(Color.white.opacity(0.70))
                                 .multilineTextAlignment(.center)
@@ -1654,7 +1654,7 @@ struct OnboardingFlowView: View {
                             self.offerLine
                                 .padding(.bottom, 14)
 
-                            Text("Cancel any time. Wispr Flow charges $15 a month, and needs the cloud to work at all.")
+                            Text("You can start dictating right now — nothing to set up, nothing to pay.")
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundStyle(Color.white.opacity(0.40))
                         }
@@ -1688,11 +1688,11 @@ struct OnboardingFlowView: View {
     /// The whole offer in one line: try it, then pay once.
     private var offerLine: some View {
         HStack(spacing: 0) {
-            self.offerBeat("Dictation free forever", isEmphasis: false)
-            self.offerArrow
-            self.offerBeat("AI formatting \(Brand.Purchase.trialDays) days free", isEmphasis: false)
+            self.offerBeat("AI cleanup free for \(Brand.Purchase.trialDays) days", isEmphasis: false)
             self.offerArrow
             self.offerBeat("then $5/mo", isEmphasis: true)
+            self.offerArrow
+            self.offerBeat("or skip it", isEmphasis: false)
         }
         .padding(.vertical, 14)
         .padding(.horizontal, 22)
