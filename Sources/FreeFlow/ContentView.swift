@@ -3787,12 +3787,22 @@ struct ContentView: View {
         }
 
         IdleBarState.shared.onStartDictationRequested = {
-            self.startRecording()
+            // Toggle, not start. Whatever begins a dictation has to be able to
+            // end it, or the only way out is a hotkey the user may not know.
+            if self.asr.isRunning {
+                Task { await self.stopAndProcessTranscription() }
+            } else {
+                self.startRecording()
+            }
         }
         IdleBarState.shared.onOpenPreferencesRequested = {
             self.menuBarManager.openPreferencesFromUI()
         }
         IdleBarWindowController.shared.start()
+        NotchContentState.shared.onStopRequested = {
+            guard self.asr.isRunning else { return }
+            Task { await self.stopAndProcessTranscription() }
+        }
         NotchContentState.shared.onCancelRequested = {
             _ = self.handleCancelShortcut()
         }

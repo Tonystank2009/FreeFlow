@@ -265,6 +265,11 @@ class NotchContentState: ObservableObject {
     /// Called when the user requests opening Preferences.
     var onOpenPreferencesRequested: (() -> Void)?
     /// Called when the user requests cancelling the current recording or overlay session.
+    /// Finish the dictation and type the result. Distinct from cancel, which
+    /// throws it away — clicking the thing that is recording you should stop
+    /// it, not discard what you just said.
+    var onStopRequested: (() -> Void)?
+
     var onCancelRequested: (() -> Void)?
 
     /// Set recording state (for waveform visibility in expanded view)

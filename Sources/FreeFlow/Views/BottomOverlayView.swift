@@ -3367,6 +3367,15 @@ struct BottomOverlayView: View {
                 }
             )
             .frame(maxWidth: .infinity, alignment: .top)
+            // Click the pill to finish. It is the thing on screen while you are
+            // talking, so it is where people look for a way to stop — and a
+            // dictation started from the idle bar otherwise has no visible way
+            // to end it at all.
+            .contentShape(Rectangle())
+            .onTapGesture {
+                self.contentState.onStopRequested?()
+            }
+            .help("Click to finish dictating")
             .transaction { transaction in
                 if self.shouldSuppressPreviewDuringRelease {
                     transaction.animation = nil
