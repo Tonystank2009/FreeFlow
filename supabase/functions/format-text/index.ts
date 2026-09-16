@@ -71,10 +71,13 @@ async function licenceIsValid(licenseKey: string): Promise<boolean> {
   }
 }
 
+/// Small models like to introduce their answer. Catch the shapes that recur,
+/// then fall back to a general rule: a short opening clause that ends in a
+/// colon and mentions the text is a preamble, not the text.
 const PREAMBLES = [
-  /^here(?:'s| is) the (?:corrected|formatted|cleaned)[^:]*:\s*/i,
-  /^(?:corrected|formatted|cleaned)(?: text)?:\s*/i,
-  /^sure[,!]?\s+here[^:]*:\s*/i,
+  /^(?:sure[,!]?\s*)?(?:here(?:'s| is)|this is|the)\s+[^:\n]{0,60}:\s*/i,
+  /^(?:corrected|formatted|cleaned|polished)(?:\s+text)?:\s*/i,
+  /^output:\s*/i,
 ];
 
 /// Strips conversational preamble and rejects output that is not a formatted
@@ -95,6 +98,13 @@ function sanitise(output: string, original: string): string | null {
   // Models sometimes wrap the whole reply in a code fence.
   const fenced = text.match(/^```(?:\w+)?\n([\s\S]*?)\n```$/);
   if (fenced) text = fenced[1].trim();
+
+  // A reply quoted in full is the same tic as a preamble: strip the wrapper
+  // only when the original was not itself quoted.
+  if (!/^["']/.test(original.trim())) {
+    const quoted = text.match(/^"([\s\S]*)"$/) ?? text.match(/^'([\s\S]*)'$/);
+    if (quoted) text = quoted[1].trim();
+  }
 
   if (!text) return null;
 

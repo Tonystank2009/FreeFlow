@@ -69,5 +69,11 @@ begin
 end;
 $$;
 
-revoke execute on function public.add_format_spend(text, text, numeric) from anon, authenticated;
-revoke execute on function public.touch_format_trial(text) from anon, authenticated;
+-- Postgres grants EXECUTE to PUBLIC on new functions by default, and revoking
+-- from anon/authenticated does not remove that. Without the PUBLIC revoke,
+-- anyone holding the publishable key could call add_format_spend directly and
+-- exhaust another user's monthly quota.
+revoke execute on function public.add_format_spend(text, text, numeric) from public, anon, authenticated;
+revoke execute on function public.touch_format_trial(text) from public, anon, authenticated;
+revoke all on public.format_spend  from public, anon, authenticated;
+revoke all on public.format_trials from public, anon, authenticated;
